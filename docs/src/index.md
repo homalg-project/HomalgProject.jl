@@ -1,5 +1,260 @@
 # HomalgProject.jl
 
+## Introduction
+
+`HomalgProject.jl` is an extension of [`GAP.jl`](https://github.com/oscar-system/GAP.jl)
+providing simplified access to
+  * [homalg project](https://homalg-project.github.io),
+  * [CAP project](https://homalg-project.github.io/CAP_project/).
+These are open source [GAP4](https://www.gap-system.org) multi-package projects
+for constructive category theory and homological algebra with applications
+to module theory of commutative and non-commutative algebras and algebraic geometry.
+
+## Installation
+
+```julia
+julia> using Pkg
+julia> Pkg.add("https://github.com/homalg-project/HomalgProject.jl")
+```
+
+## Quick start
+
+You can try the following example to test the functionality of `HomalgProject.jl`
+package. For it to work the executable of the computer algebra system
+[Singular](https://www.singular.uni-kl.de/index.php/singular-download.html)
+must be in your path.
+
+```julia-repl
+julia> using HomalgProject
+Adding path /Users/mo/.julia/dev/GAP/gap/.libs to DL_LOAD_PATH
+ ┌───────┐   GAP 4.dev of today
+ │  GAP  │   https://www.gap-system.org
+ └───────┘   Architecture: x86_64-apple-darwin18.6.0-julia64-kv6
+ Configuration:  gmp 6.1.2, Julia GC, Julia 1.1.0
+ Loading the library and packages ...
+ Packages:   GAPDoc 1.6.2, PrimGrp 3.3.2, SmallGrp 1.3, TransGrp 2.0.4
+ Try '??help' for help. See also '?copyright', '?cite' and '?authors'
+
+julia> LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
+
+julia> ℚ = HomalgFieldOfRationalsInSingular( )
+================================================================
+                     SINGULAR                                 /  Development
+ A Computer Algebra System for Polynomial Computations       /   version 4.1.2
+                                                           0<
+ by: W. Decker, G.-M. Greuel, G. Pfister, H. Schoenemann     \   Feb 2019
+FB Mathematik der Universitaet, D-67653 Kaiserslautern        \
+================================================================
+GAP: Q
+
+julia> R = ℚ["x,y,z"]
+GAP: Q[x,y,z]
+
+julia> M = HomalgMatrix( """
+           [ x*y,  y*z,    z,        0,         0,
+	     x^3*z,x^2*z^2,0,        x*z^2,     -z^2,
+	     x^4,  x^3*z,  0,        x^2*z,     -x*z,
+	     0,    0,      x*y,      -y^2,      x^2-1,
+	     0,    0,      x^2*z,    -x*y*z,    y*z,
+             0,    0,      x^2*y-x^2,-x*y^2+x*y,y^2-y ]
+             """, 6, 5, R )
+GAP: <A 6 x 5 matrix over an external ring>
+
+julia> M = LeftPresentation( M )
+GAP: <A left module presented by 6 relations for 5 generators>
+
+julia> Display( M )
+x*y,  y*z,    z,        0,         0,
+x^3*z,x^2*z^2,0,        x*z^2,     -z^2,
+x^4,  x^3*z,  0,        x^2*z,     -x*z,
+0,    0,      x*y,      -y^2,      x^2-1,
+0,    0,      x^2*z,    -x*y*z,    y*z,
+0,    0,      x^2*y-x^2,-x*y^2+x*y,y^2-y
+
+Cokernel of the map
+
+Q[x,y,z]^(1x6) --> Q[x,y,z]^(1x5),
+
+currently represented by the above matrix
+
+julia> filt = PurityFiltration( M )
+GAP: <The ascending purity filtration with degrees [ -3 .. 0 ] and graded parts:
+   0:	  <A codegree-[ 1, 1 ]-pure rank 2 left module presented by 3 relations for 4 generators>
+  -1:	  <A codegree-1-pure grade 1 left module presented by 4 relations for 3 generators>
+  -2:	  <A cyclic reflexively pure grade 2 left module presented by 2 relations for a cyclic generator>
+  -3:	  <A cyclic reflexively pure grade 3 left module presented by 3 relations for a cyclic generator>
+of
+<A non-pure rank 2 left module presented by 6 relations for 5 generators>>
+
+julia> Display( filt )
+Degree 0:
+
+0,  0,   x, -y,
+x*y,-y*z,-z,0,
+x^2,-x*z,0, -z
+
+Cokernel of the map
+
+Q[x,y,z]^(1x3) --> Q[x,y,z]^(1x4),
+
+currently represented by the above matrix
+----------
+Degree -1:
+
+y,-z,0,
+x,0, -z,
+0,x, -y,
+0,-y,x^2-1
+
+Cokernel of the map
+
+Q[x,y,z]^(1x4) --> Q[x,y,z]^(1x3),
+
+currently represented by the above matrix
+----------
+Degree -2:
+
+Q[x,y,z]/< z, y-1 >
+----------
+Degree -3:
+
+Q[x,y,z]/< z, y, x >
+
+julia> II_E = SpectralSequence( filt )
+GAP: <A stable homological spectral sequence with sheets at levels [ 0 .. 4 ] each consisting of left modules at bidegrees [ -3 .. 0 ]x[ 0 .. 3 ]>
+
+julia> Display( II_E )
+The associated transposed spectral sequence:
+
+a homological spectral sequence at bidegrees
+[ [ 0 .. 3 ], [ -3 .. 0 ] ]
+---------
+Level 0:
+
+ * * * *
+ * * * *
+ . * * *
+ . . * *
+---------
+Level 1:
+
+ * * * *
+ . . . .
+ . . . .
+ . . . .
+---------
+Level 2:
+
+ s . . .
+ . . . .
+ . . . .
+ . . . .
+
+Now the spectral sequence of the bicomplex:
+
+a homological spectral sequence at bidegrees
+[ [ -3 .. 0 ], [ 0 .. 3 ] ]
+---------
+Level 0:
+
+ * * * *
+ * * * *
+ . * * *
+ . . * *
+---------
+Level 1:
+
+ * * * *
+ * * * *
+ . * * *
+ . . . *
+---------
+Level 2:
+
+ s . . .
+ * s . .
+ . * * .
+ . . . *
+---------
+Level 3:
+
+ s . . .
+ * s . .
+ . . s .
+ . . . *
+---------
+Level 4:
+
+ s . . .
+ . s . .
+ . . s .
+ . . . s
+
+julia> FilteredByPurity( M )
+GAP: <A non-pure rank 2 left module presented by 12 relations for 9 generators>
+
+julia> Display( M )
+0,  0,   x, -y,0,1, 0,    0,  0,
+x*y,-y*z,-z,0, 0,0, 0,    0,  0,
+x^2,-x*z,0, -z,1,0, 0,    0,  0,
+0,  0,   0, 0, y,-z,0,    0,  0,
+0,  0,   0, 0, x,0, -z,   0,  -1,
+0,  0,   0, 0, 0,x, -y,   -1, 0,
+0,  0,   0, 0, 0,-y,x^2-1,0,  0,
+0,  0,   0, 0, 0,0, 0,    z,  0,
+0,  0,   0, 0, 0,0, 0,    y-1,0,
+0,  0,   0, 0, 0,0, 0,    0,  z,
+0,  0,   0, 0, 0,0, 0,    0,  y,
+0,  0,   0, 0, 0,0, 0,    0,  x
+
+Cokernel of the map
+
+Q[x,y,z]^(1x12) --> Q[x,y,z]^(1x9),
+
+currently represented by the above matrix
+
+julia> OnFirstStoredPresentation( M )
+GAP: <A non-pure rank 2 left module presented by 6 relations for 5 generators>
+
+julia> Display( M )
+x*y,  y*z,    z,        0,         0,
+x^3*z,x^2*z^2,0,        x*z^2,     -z^2,
+x^4,  x^3*z,  0,        x^2*z,     -x*z,
+0,    0,      x*y,      -y^2,      x^2-1,
+0,    0,      x^2*z,    -x*y*z,    y*z,
+0,    0,      x^2*y-x^2,-x*y^2+x*y,y^2-y
+
+Cokernel of the map
+
+Q[x,y,z]^(1x6) --> Q[x,y,z]^(1x5),
+
+currently represented by the above matrix
+
+julia> OnLastStoredPresentation( M )
+GAP: <A non-pure rank 2 left module presented by 12 relations for 9 generators>
+
+julia> Display( M )
+0,  0,   x, -y,0,1, 0,    0,  0,
+x*y,-y*z,-z,0, 0,0, 0,    0,  0,
+x^2,-x*z,0, -z,1,0, 0,    0,  0,
+0,  0,   0, 0, y,-z,0,    0,  0,
+0,  0,   0, 0, x,0, -z,   0,  -1,
+0,  0,   0, 0, 0,x, -y,   -1, 0,
+0,  0,   0, 0, 0,-y,x^2-1,0,  0,
+0,  0,   0, 0, 0,0, 0,    z,  0,
+0,  0,   0, 0, 0,0, 0,    y-1,0,
+0,  0,   0, 0, 0,0, 0,    0,  z,
+0,  0,   0, 0, 0,0, 0,    0,  y,
+0,  0,   0, 0, 0,0, 0,    0,  x
+
+Cokernel of the map
+
+Q[x,y,z]^(1x12) --> Q[x,y,z]^(1x9),
+
+currently represented by the above matrix
+
+```
+
 ```@index
 ```
 
