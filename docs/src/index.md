@@ -251,9 +251,6 @@ currently represented by the above matrix
 
 ```
 
-```julia-repl
-```
-
 ```@meta
 DocTestSetup = nothing
 ```
