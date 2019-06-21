@@ -26,14 +26,6 @@ must be in your path.
 
 ```julia-repl
 julia> using HomalgProject
-Adding path /Users/mo/.julia/dev/GAP/gap/.libs to DL_LOAD_PATH
- ┌───────┐   GAP 4.dev of today
- │  GAP  │   https://www.gap-system.org
- └───────┘   Architecture: x86_64-apple-darwin18.6.0-julia64-kv6
- Configuration:  gmp 6.1.2, Julia GC, Julia 1.1.0
- Loading the library and packages ...
- Packages:   GAPDoc 1.6.2, PrimGrp 3.3.2, SmallGrp 1.3, TransGrp 2.0.4
- Try '??help' for help. See also '?copyright', '?cite' and '?authors'
 
 julia> LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
 
