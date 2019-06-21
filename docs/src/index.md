@@ -24,35 +24,39 @@ package. For it to work the executable of the computer algebra system
 [Singular](https://www.singular.uni-kl.de/index.php/singular-download.html)
 must be in your path.
 
-```julia-repl
+```@meta
+DocTestSetup = quote
+    using HomalgProject
+    LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
+    GAP.Globals.HOMALG_IO.show_banners = false
+    HomalgFieldOfRationalsInSingular = GAP.Globals.HomalgFieldOfRationalsInSingular
+    LeftPresentation = GAP.Globals.LeftPresentation
+    Display = GAP.Display
+    PurityFiltration = GAP.Globals.PurityFiltration
+    SpectralSequence = GAP.Globals.SpectralSequence
+    FilteredByPurity = GAP.Globals.FilteredByPurity
+    OnFirstStoredPresentation = GAP.Globals.OnFirstStoredPresentation
+    OnLastStoredPresentation = GAP.Globals.OnLastStoredPresentation
+end
+```
+
+```jldoctest
 julia> using HomalgProject
 
 julia> LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
 
 julia> ℚ = HomalgFieldOfRationalsInSingular( )
-================================================================
-                     SINGULAR                                 /  Development
- A Computer Algebra System for Polynomial Computations       /   version 4.1.2
-                                                           0<
- by: W. Decker, G.-M. Greuel, G. Pfister, H. Schoenemann     \   Feb 2019
-FB Mathematik der Universitaet, D-67653 Kaiserslautern        \
-================================================================
 GAP: Q
 
 julia> R = ℚ["x,y,z"]
 GAP: Q[x,y,z]
 
-julia> M = HomalgMatrix( """
-           [ x*y,  y*z,    z,        0,         0,
-	     x^3*z,x^2*z^2,0,        x*z^2,     -z^2,
-	     x^4,  x^3*z,  0,        x^2*z,     -x*z,
-	     0,    0,      x*y,      -y^2,      x^2-1,
-	     0,    0,      x^2*z,    -x*y*z,    y*z,
-             0,    0,      x^2*y-x^2,-x*y^2+x*y,y^2-y ]
-             """, 6, 5, R )
+julia> m = "[ x*y,y*z,z,0,0, x^3*z,x^2*z^2,0,x*z^2,-z^2, x^4,x^3*z,0,x^2*z,-x*z, 0,0,x*y,-y^2,x^2-1, 0,0,x^2*z,-x*y*z,y*z, 0,0,x^2*y-x^2,-x*y^2+x*y,y^2-y ]";
+
+julia> m = HomalgMatrix( m, 6, 5, R )
 GAP: <A 6 x 5 matrix over an external ring>
 
-julia> M = LeftPresentation( M )
+julia> M = LeftPresentation( m )
 GAP: <A left module presented by 6 relations for 5 generators>
 
 julia> Display( M )
@@ -71,10 +75,10 @@ currently represented by the above matrix
 
 julia> filt = PurityFiltration( M )
 GAP: <The ascending purity filtration with degrees [ -3 .. 0 ] and graded parts:
-   0:	  <A codegree-[ 1, 1 ]-pure rank 2 left module presented by 3 relations for 4 generators>
-  -1:	  <A codegree-1-pure grade 1 left module presented by 4 relations for 3 generators>
-  -2:	  <A cyclic reflexively pure grade 2 left module presented by 2 relations for a cyclic generator>
-  -3:	  <A cyclic reflexively pure grade 3 left module presented by 3 relations for a cyclic generator>
+   0:	<A codegree-[ 1, 1 ]-pure rank 2 left module presented by 3 relations for 4 generators>
+  -1:	<A codegree-1-pure grade 1 left module presented by 4 relations for 3 generators>
+  -2:	<A cyclic reflexively pure grade 2 left module presented by 2 relations for a cyclic generator>
+  -3:	<A cyclic reflexively pure grade 3 left module presented by 3 relations for a cyclic generator>
 of
 <A non-pure rank 2 left module presented by 6 relations for 5 generators>>
 
@@ -245,6 +249,13 @@ Q[x,y,z]^(1x12) --> Q[x,y,z]^(1x9),
 
 currently represented by the above matrix
 
+```
+
+```julia-repl
+```
+
+```@meta
+DocTestSetup = nothing
 ```
 
 ```@index
