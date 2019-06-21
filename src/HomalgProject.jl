@@ -19,4 +19,8 @@ end
 
 export HomalgMatrix
 
+function __init__()
+    LoadPackageAndExposeGlobals( "IO_ForHomalg", Main, all_globals = true )
+end
+
 end # module
