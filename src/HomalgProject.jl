@@ -17,9 +17,17 @@ function HomalgMatrix( M::String, m::Int64, n::Int64, R::GAP.GapObj )
     return GAP.Globals.HomalgMatrix( GAP.julia_to_gap( M ), m, n, R )
 end
 
-export HomalgMatrix
+export_list = Symbol[ :HomalgMatrix ]
 
 function __init__()
+    ## Current hack to remove warning for overwriting
+    ## HomalgMatrix when exporting it. Needs to remove once
+    ## LoadPackageAndExposeGlobals is done better.
+    global export_list
+    for i in export_list
+        current_value = eval(:($i))
+        Base.MainInclude.eval(:($i = $current_value))
+    end
     LoadPackageAndExposeGlobals( "IO_ForHomalg", Main, all_globals = true )
 end
 
