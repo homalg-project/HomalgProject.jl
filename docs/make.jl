@@ -5,6 +5,7 @@ makedocs(;
     format=Documenter.HTML(assets=String[]),
     pages=[
         "Home" => "index.md",
+        "Examples" => "examples.md",
     ],
     repo="https://github.com/homalg-project/HomalgProject.jl/blob/{commit}{path}#L{line}",
     sitename="HomalgProject.jl",
