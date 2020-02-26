@@ -5,6 +5,7 @@ version = "0.1.0"
 
 [deps]
 GAP = "c863536a-3901-11e9-33e7-d5cd0df7b904"
+Singular = "bcd08a7b-43d2-5ff7-b6d4-c458787f915c"
 
 [compat]
 julia = "1.1"

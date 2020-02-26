@@ -7,6 +7,8 @@ import Base: getindex
 import GAP
 export GAP
 
+import Singular
+
 import GAP: LoadPackageAndExposeGlobals, @g_str, @gap
 export LoadPackageAndExposeGlobals, @g_str, @gap
 
@@ -28,7 +30,17 @@ function __init__()
         current_value = eval(:($i))
         Base.MainInclude.eval(:($i = $current_value))
     end
+    singular = GAP.julia_to_gap(joinpath(splitdir(splitdir(pathof(Singular))[1])[1],"deps/usr/bin/"))
+    lib = joinpath(splitdir(splitdir(pathof(Singular))[1])[1],"deps/usr/lib/")
+    paths = GAP.Globals.Concatenation( GAP.julia_to_gap( [ singular ] ), GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
+    GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
     LoadPackageAndExposeGlobals( "IO_ForHomalg", Main, all_globals = true )
+    homalg = joinpath(splitdir(splitdir(pathof(HomalgProject))[1])[1],"src/")
+    path = GAP.julia_to_gap(joinpath(homalg,"LaunchCAS_IO_ForHomalg.g"))
+    GAP.Globals.Read(path)
+    LoadPackageAndExposeGlobals( "RingsForHomalg", Main, all_globals = true )
+    lib = [ "LD_LIBRARY_PATH="*lib*":\$LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH="*lib*":\$DYLD_LIBRARY_PATH" ]
+    GAP.Globals.HOMALG_IO_Singular.environment = GAP.julia_to_gap( [GAP.julia_to_gap(lib[1]), GAP.julia_to_gap(lib[2])] )
 end
 
 end # module
