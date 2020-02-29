@@ -6,42 +6,10 @@ The following examples tests the functionality of the software projects
 * [homalg project](https://github.com/homalg-project/homalg_project)
 * [CAP project](https://github.com/homalg-project/CAP_project)
 For them to work an executable of the computer algebra system
-[Singular](https://www.singular.uni-kl.de/index.php/singular-download.html)
-must be in your path.
 
 ```@meta
 DocTestSetup = quote
-    using HomalgProject
-    LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
-    LoadPackageAndExposeGlobals( "GradedModulePresentationsForCAP", Main, all_globals = true )
-    GAP.Globals.HOMALG_IO.show_banners = false
-    HomalgFieldOfRationalsInSingular = GAP.Globals.HomalgFieldOfRationalsInSingular
-    LeftPresentation = GAP.Globals.LeftPresentation
-    Display = GAP.Display
-    PurityFiltration = GAP.Globals.PurityFiltration
-    SpectralSequence = GAP.Globals.SpectralSequence
-    FilteredByPurity = GAP.Globals.FilteredByPurity
-    OnFirstStoredPresentation = GAP.Globals.OnFirstStoredPresentation
-    OnLastStoredPresentation = GAP.Globals.OnLastStoredPresentation
-    GradedRing = GAP.Globals.GradedRing
-    GradedLeftPresentations = GAP.Globals.GradedLeftPresentations
-    InfoOfInstalledOperationsOfCategory = GAP.Globals.InfoOfInstalledOperationsOfCategory
-    ListPrimitivelyInstalledOperationsOfCategory = GAP.Globals.ListPrimitivelyInstalledOperationsOfCategory
-    GradedFreeLeftPresentation = GAP.Globals.GradedFreeLeftPresentation
-    GradedPresentationMorphism = GAP.Globals.GradedPresentationMorphism
-    IsWellDefined = GAP.Globals.IsWellDefined
-    IsMonomorphism = GAP.Globals.IsMonomorphism
-    IsEpimorphism = GAP.Globals.IsEpimorphism
-    ImageEmbedding = GAP.Globals.ImageEmbedding
-    CokernelObject = GAP.Globals.CokernelObject
-    IsZero = GAP.Globals.IsZero
-    AffineDimension = GAP.Globals.AffineDimension
-    FullSubcategoryByMembershipFunction = GAP.Globals.FullSubcategoryByMembershipFunction
-    / = GAP.Globals.QUO
-    CanonicalProjection = GAP.Globals.CanonicalProjection
-    InstallFunctor = GAP.Globals.InstallFunctor
-    ApplyFunctor = GAP.Globals.ApplyFunctor
-    IsIsomorphism = GAP.Globals.IsIsomorphism
+    #using HomalgProject
 end
 ```
 
