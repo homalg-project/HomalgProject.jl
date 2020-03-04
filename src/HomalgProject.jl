@@ -30,6 +30,7 @@ function __init__()
         current_value = eval(:($i))
         Base.MainInclude.eval(:($i = $current_value))
     end
+    GAP.Globals.ExtendRootDirectories( GAP.julia_to_gap( [ GAP.Globals.UserHomeExpand( GAP.julia_to_gap( "~/.gap/" ) ) ] ) )
     singular = GAP.julia_to_gap(joinpath(splitdir(splitdir(pathof(Singular))[1])[1],"deps/usr/bin/"))
     lib = joinpath(splitdir(splitdir(pathof(Singular))[1])[1],"deps/usr/lib/")
     paths = GAP.Globals.Concatenation( GAP.julia_to_gap( [ singular ] ), GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
