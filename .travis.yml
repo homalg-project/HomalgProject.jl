@@ -2,6 +2,8 @@
 language: julia
 os:
   - linux
+# Force Ubuntu 18.04 "Bionic" to get even newer GCC, binutils etc.
+dist: bionic
 julia:
   - 1.1
   - 1.2
