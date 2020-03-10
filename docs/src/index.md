@@ -14,7 +14,7 @@ to module theory of commutative and non-commutative algebras and algebraic geome
 
 ```julia
 julia> using Pkg
-julia> Pkg.add("https://github.com/homalg-project/HomalgProject.jl")
+julia> Pkg.add("HomalgProject")
 ```
 
 ```@index
