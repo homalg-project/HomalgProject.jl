@@ -19,17 +19,10 @@ function HomalgMatrix( M::String, m::Int64, n::Int64, R::GAP.GapObj )
     return GAP.Globals.HomalgMatrix( GAP.julia_to_gap( M ), m, n, R )
 end
 
-export_list = Symbol[ :HomalgMatrix ]
+export HomalgMatrix
 
 function __init__()
-    ## Current hack to remove warning for overwriting
-    ## HomalgMatrix when exporting it. Needs to remove once
-    ## LoadPackageAndExposeGlobals is done better.
-    global export_list
-    for i in export_list
-        current_value = eval(:($i))
-        Base.MainInclude.eval(:($i = $current_value))
-    end
+    
     GAP.Globals.ExtendRootDirectories( GAP.julia_to_gap( [ GAP.Globals.UserHomeExpand( GAP.julia_to_gap( "~/.gap/" ) ) ] ) )
     singular = GAP.julia_to_gap(joinpath(splitdir(splitdir(pathof(Singular))[1])[1],"deps/usr/bin/"))
     lib = joinpath(splitdir(splitdir(pathof(Singular))[1])[1],"deps/usr/lib/")
