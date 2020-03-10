@@ -5,7 +5,6 @@
 The following examples tests the functionality of the software projects
 * [homalg project](https://github.com/homalg-project/homalg_project)
 * [CAP project](https://github.com/homalg-project/CAP_project)
-For them to work an executable of the computer algebra system
 
 ```@meta
 DocTestSetup = quote
