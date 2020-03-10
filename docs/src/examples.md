@@ -8,12 +8,44 @@ The following examples tests the functionality of the software projects
 
 ```@meta
 DocTestSetup = quote
-    #using HomalgProject
+    using HomalgProject
+    LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
+    LoadPackageAndExposeGlobals( "GradedModulePresentationsForCAP", Main, all_globals = true )
+    GAP.Globals.HOMALG_IO.show_banners = false
+    HomalgFieldOfRationalsInSingular = GAP.Globals.HomalgFieldOfRationalsInSingular
+    LeftPresentation = GAP.Globals.LeftPresentation
+    Display = GAP.Display
+    PurityFiltration = GAP.Globals.PurityFiltration
+    SpectralSequence = GAP.Globals.SpectralSequence
+    FilteredByPurity = GAP.Globals.FilteredByPurity
+    OnFirstStoredPresentation = GAP.Globals.OnFirstStoredPresentation
+    OnLastStoredPresentation = GAP.Globals.OnLastStoredPresentation
+    GradedRing = GAP.Globals.GradedRing
+    GradedLeftPresentations = GAP.Globals.GradedLeftPresentations
+    InfoOfInstalledOperationsOfCategory = GAP.Globals.InfoOfInstalledOperationsOfCategory
+    ListPrimitivelyInstalledOperationsOfCategory = GAP.Globals.ListPrimitivelyInstalledOperationsOfCategory
+    GradedFreeLeftPresentation = GAP.Globals.GradedFreeLeftPresentation
+    GradedPresentationMorphism = GAP.Globals.GradedPresentationMorphism
+    IsWellDefined = GAP.Globals.IsWellDefined
+    IsMonomorphism = GAP.Globals.IsMonomorphism
+    IsEpimorphism = GAP.Globals.IsEpimorphism
+    ImageEmbedding = GAP.Globals.ImageEmbedding
+    CokernelObject = GAP.Globals.CokernelObject
+    IsZero = GAP.Globals.IsZero
+    AffineDimension = GAP.Globals.AffineDimension
+    FullSubcategoryByMembershipFunction = GAP.Globals.FullSubcategoryByMembershipFunction
+    / = GAP.Globals.QUO
+    CanonicalProjection = GAP.Globals.CanonicalProjection
+    InstallFunctor = GAP.Globals.InstallFunctor
+    ApplyFunctor = GAP.Globals.ApplyFunctor
+    IsIsomorphism = GAP.Globals.IsIsomorphism
 end
 ```
 
 ```jldoctest
 julia> using HomalgProject
+
+julia> LoadPackageAndExposeGlobals( "OscarForHomalg", Main, all_globals = true )
 
 julia> LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
 
