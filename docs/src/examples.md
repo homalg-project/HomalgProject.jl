@@ -10,9 +10,7 @@ The following examples tests the functionality of the software projects
 DocTestSetup = quote
     using HomalgProject
     GAP.Globals.SizeScreen( GAP.julia_to_gap( [ 4096 ] ) )
-    LoadPackageAndExposeGlobals( "IO_ForHomalg", Main, all_globals = true )
     LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
-    GAP.Globals.HOMALG_IO.show_banners = false
     HomalgFieldOfRationalsInSingular = GAP.Globals.HomalgFieldOfRationalsInSingular
     LeftPresentation = GAP.Globals.LeftPresentation
     Display = GAP.Display
@@ -28,6 +26,9 @@ end
 julia> using HomalgProject
 
 julia> LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
+
+julia> UseExternalSingular( false )
+true
 
 julia> ℚ = HomalgFieldOfRationalsInSingular( )
 GAP: Q
@@ -51,6 +52,7 @@ x^4,  x^3*z,  0,        x^2*z,     -x*z,
 0,    0,      x^2*z,    -x*y*z,    y*z,
 0,    0,      x^2*y-x^2,-x*y^2+x*y,y^2-y
 
+
 Cokernel of the map
 
 Q[x,y,z]^(1x6) --> Q[x,y,z]^(1x5),
@@ -73,6 +75,7 @@ Degree 0:
 x*y,-y*z,-z,0,
 x^2,-x*z,0, -z
 
+
 Cokernel of the map
 
 Q[x,y,z]^(1x3) --> Q[x,y,z]^(1x4),
@@ -85,6 +88,7 @@ y,-z,0,
 x,0, -z,
 0,x, -y,
 0,-y,x^2-1
+
 
 Cokernel of the map
 
@@ -187,6 +191,7 @@ x^2,-x*z,0, -z,1,0, 0,    0,  0,
 0,  0,   0, 0, 0,0, 0,    0,  y,
 0,  0,   0, 0, 0,0, 0,    0,  x
 
+
 Cokernel of the map
 
 Q[x,y,z]^(1x12) --> Q[x,y,z]^(1x9),
@@ -203,6 +208,7 @@ x^4,  x^3*z,  0,        x^2*z,     -x*z,
 0,    0,      x*y,      -y^2,      x^2-1,
 0,    0,      x^2*z,    -x*y*z,    y*z,
 0,    0,      x^2*y-x^2,-x*y^2+x*y,y^2-y
+
 
 Cokernel of the map
 
@@ -226,6 +232,7 @@ x^2,-x*z,0, -z,1,0, 0,    0,  0,
 0,  0,   0, 0, 0,0, 0,    0,  z,
 0,  0,   0, 0, 0,0, 0,    0,  y,
 0,  0,   0, 0, 0,0, 0,    0,  x
+
 
 Cokernel of the map
 

@@ -104,3 +104,113 @@ end;
 MakeReadOnlyGlobal( "LaunchCAS_IO_ForHomalg" );
 
 fi;
+
+if not IsPackageMarkedForLoading( "HomalgToCAS", ">=2020.02.26" ) then
+    
+MakeReadWriteGlobal( "LaunchCAS" );
+
+LaunchCAS := function( arg )
+    local nargs, HOMALG_IO_CAS, executables, e, s;
+    
+    nargs := Length( arg );
+    
+    HOMALG_IO_CAS := arg[1];
+    
+    if IsString( HOMALG_IO_CAS ) then
+        HOMALG_IO_CAS := ValueGlobal( HOMALG_IO_CAS );
+    else
+        Error( "for security reasons LaunchCAS only accepts a string (as a first argument) which points to a HOMALG_IO_CAS record\n" );
+    fi;
+    
+    if IsBound( HOMALG_IO_CAS.LaunchCAS ) and IsFunction( HOMALG_IO_CAS.LaunchCAS ) then
+        
+        s := CallFuncList( HOMALG_IO_CAS.LaunchCAS, arg );
+        
+        if s = fail then
+            Error( "the alternative launcher returned fail\n" );
+        fi;
+        
+    else
+        
+        if LoadPackage( "IO_ForHomalg" ) <> true then
+            Error( "the package IO_ForHomalg failed to load\n" );
+        fi;
+        
+        s := CallFuncList( LaunchCAS_IO_ForHomalg, Concatenation( [ HOMALG_IO_CAS ], arg{[ 2 .. nargs ]} ) );
+        
+    fi;
+    
+    for e in NamesOfComponents( HOMALG_IO_CAS ) do
+        if not IsBound( s.( e ) ) then
+            s.( e ) := HOMALG_IO_CAS.( e );
+        fi;
+    od;
+    
+    if not IsBound( s.variable_name ) then
+        s.variable_name := HOMALG_IO.variable_name;
+    fi;
+    
+    if IsBound( HOMALG_IO.color_display ) and HOMALG_IO.color_display = true
+       and IsBound( s.display_color ) then
+        s.color_display := s.display_color;
+    fi;
+    
+    if IsBound( HOMALG_IO.DeletePeriod ) and
+       ( IsPosInt( HOMALG_IO.DeletePeriod ) or IsBool( HOMALG_IO.DeletePeriod ) ) then
+        s.DeletePeriod := HOMALG_IO.DeletePeriod;
+    fi;
+    
+    s.StatisticsObject :=
+      NewStatisticsObject(
+              rec(
+                  LookupTable := "HOMALG_IO.Pictograms",
+                  summary := rec(
+                       HomalgExternalCallCounter := 0,
+                       HomalgExternalVariableCounter := 0,
+                       HomalgExternalCommandCounter := 0,
+                       HomalgExternalOutputCounter := 0,
+                       HomalgBackStreamMaximumLength := 0,
+                       HomalgExternalWarningsCounter := 0
+                       )
+                  ),
+              TheTypeStatisticsObjectForStreams
+              );
+    
+    s.homalgExternalObjectsPointingToVariables :=
+      ContainerForWeakPointers( TheTypeContainerForWeakPointersOnHomalgExternalObjects );
+    
+    s.homalgExternalObjectsPointingToVariables!.assignments_pending := [ ];
+    s.homalgExternalObjectsPointingToVariables!.assignments_failed := [ ];
+    s.homalgExternalObjectsPointingToVariables!.processes := [ ];
+    
+    if IsBound( s.InitialSendBlockingToCAS ) then
+        s.InitialSendBlockingToCAS( s, "\n" );
+    else
+        s.SendBlockingToCAS( s, "\n" );
+    fi;
+    
+    if ( not ( IsBound( HOMALG_IO.show_banners ) and HOMALG_IO.show_banners = false )
+         and not ( IsBound( s.show_banner ) and s.show_banner = false ) )
+       and ( ( IsBound( s.banner ) and ( IsString( s.banner ) or IsFunction( s.banner ) ) )
+             or Length( s.lines ) > 0 ) then
+        Print( "================================================================\n" );
+        if IsBound( s.color_display ) then
+            Print( s.color_display );
+        fi;
+        if IsBound( s.banner ) and IsString( s.banner ) then
+            Print( s.banner );
+        elif IsBound( s.banner ) and IsFunction( s.banner ) then
+            s.banner( s );
+        else
+            Print( s.lines );
+        fi;
+        Print( "\033[0m\n================================================================\n" );
+    fi;
+    
+    return s;
+    
+end;
+
+MakeReadOnlyGlobal( "LaunchCAS" );
+
+fi;

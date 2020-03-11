@@ -8,6 +8,8 @@ import GAP
 export GAP
 
 import Singular
+import Singular.libSingular: call_interpreter
+export call_interpreter
 
 import GAP: LoadPackageAndExposeGlobals, @g_str, @gap
 export LoadPackageAndExposeGlobals, @g_str, @gap
@@ -21,7 +23,14 @@ end
 
 export HomalgMatrix
 
-function UseExternalSingular( )
+function UseExternalSingular( bool::Bool )
+    
+    if bool == false
+        ## LoadPackage( "OscarForHomalg" ) ## needed for LaunchCASJSingularInterpreterForHomalg
+        LoadPackageAndExposeGlobals( "OscarForHomalg", Main, all_globals = true )
+        GAP.Globals.HOMALG_IO_Singular.LaunchCAS = GAP.Globals.LaunchCASJSingularInterpreterForHomalg
+        return true
+    end
     
     ## add ~/.julia/.../Singular/deps/usr/bin/ to GAPInfo.DirectoriesSystemPrograms
     singular = splitdir(splitdir(pathof(Singular))[1])[1]
@@ -30,7 +39,9 @@ function UseExternalSingular( )
     paths = GAP.Globals.Concatenation( GAP.julia_to_gap( [ singular ] ), GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
     GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
     
-    ## LoadPackage( "IO_ForHomalg" ) ## needed to when reading LaunchCAS_IO_ForHomalg.g below
+    CompileGapPackage( "io", print_available = false )
+    
+    ## LoadPackage( "IO_ForHomalg" ) ## needed when reading LaunchCAS_IO_ForHomalg.g below
     LoadPackageAndExposeGlobals( "IO_ForHomalg", Main, all_globals = true )
     
     ## Read( "LaunchCAS_IO_ForHomalg.g" )
@@ -45,7 +56,9 @@ function UseExternalSingular( )
     lib = [ "LD_LIBRARY_PATH="*lib*":\$LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH="*lib*":\$DYLD_LIBRARY_PATH" ]
     GAP.Globals.HOMALG_IO_Singular.environment = GAP.julia_to_gap( [GAP.julia_to_gap(lib[1]), GAP.julia_to_gap(lib[2])] )
     
-    return nothing
+    GAP.Globals.HOMALG_IO_Singular.LaunchCAS = false
+    
+    return true
     
 end
 
@@ -98,10 +111,13 @@ function __init__()
     ## add ~/.gap/ to GAPInfo.RootPaths
     GAP.Globals.ExtendRootDirectories( GAP.julia_to_gap( [ GAP.Globals.UserHomeExpand( GAP.julia_to_gap( "~/.gap/" ) ) ] ) )
     
-    CompileGapPackage( "io", print_available = false )
+    ## add ~/.julia/.../HomalgProject/ to GAPInfo.RootPaths
+    homalg = splitdir(splitdir(pathof(HomalgProject))[1])[1]
+    GAP.Globals.ExtendRootDirectories( GAP.julia_to_gap( [ GAP.julia_to_gap( homalg*"/" ) ] ) )
+    
     CompileGapPackage( "Gauss", print_available = false )
-
-    UseExternalSingular( )
+    
+    UseExternalSingular( true )
     
 end
 
