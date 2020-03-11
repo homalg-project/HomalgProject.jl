@@ -1,7 +1,7 @@
 name = "HomalgProject"
 uuid = "50bd374c-87b5-11e9-015a-2febe71398bd"
 authors = ["Mohamed Barakat <mohamed.barakat@uni-siegen.de>"]
-version = "0.1.5"
+version = "0.1.6"
 
 [deps]
 GAP = "c863536a-3901-11e9-33e7-d5cd0df7b904"
@@ -14,6 +14,7 @@ Singular = "^0.2"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 
 [targets]
-test = ["Test"]
+test = ["Test","Documenter"]

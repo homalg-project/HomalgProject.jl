@@ -9,8 +9,9 @@ The following examples tests the functionality of the software projects
 ```@meta
 DocTestSetup = quote
     using HomalgProject
+    GAP.Globals.SizeScreen( GAP.julia_to_gap( [ 4096 ] ) )
+    LoadPackageAndExposeGlobals( "IO_ForHomalg", Main, all_globals = true )
     LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
-    LoadPackageAndExposeGlobals( "GradedModulePresentationsForCAP", Main, all_globals = true )
     GAP.Globals.HOMALG_IO.show_banners = false
     HomalgFieldOfRationalsInSingular = GAP.Globals.HomalgFieldOfRationalsInSingular
     LeftPresentation = GAP.Globals.LeftPresentation
@@ -20,32 +21,11 @@ DocTestSetup = quote
     FilteredByPurity = GAP.Globals.FilteredByPurity
     OnFirstStoredPresentation = GAP.Globals.OnFirstStoredPresentation
     OnLastStoredPresentation = GAP.Globals.OnLastStoredPresentation
-    GradedRing = GAP.Globals.GradedRing
-    GradedLeftPresentations = GAP.Globals.GradedLeftPresentations
-    InfoOfInstalledOperationsOfCategory = GAP.Globals.InfoOfInstalledOperationsOfCategory
-    ListPrimitivelyInstalledOperationsOfCategory = GAP.Globals.ListPrimitivelyInstalledOperationsOfCategory
-    GradedFreeLeftPresentation = GAP.Globals.GradedFreeLeftPresentation
-    GradedPresentationMorphism = GAP.Globals.GradedPresentationMorphism
-    IsWellDefined = GAP.Globals.IsWellDefined
-    IsMonomorphism = GAP.Globals.IsMonomorphism
-    IsEpimorphism = GAP.Globals.IsEpimorphism
-    ImageEmbedding = GAP.Globals.ImageEmbedding
-    CokernelObject = GAP.Globals.CokernelObject
-    IsZero = GAP.Globals.IsZero
-    AffineDimension = GAP.Globals.AffineDimension
-    FullSubcategoryByMembershipFunction = GAP.Globals.FullSubcategoryByMembershipFunction
-    / = GAP.Globals.QUO
-    CanonicalProjection = GAP.Globals.CanonicalProjection
-    InstallFunctor = GAP.Globals.InstallFunctor
-    ApplyFunctor = GAP.Globals.ApplyFunctor
-    IsIsomorphism = GAP.Globals.IsIsomorphism
 end
 ```
 
 ```jldoctest
 julia> using HomalgProject
-
-julia> LoadPackageAndExposeGlobals( "OscarForHomalg", Main, all_globals = true )
 
 julia> LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
 
@@ -252,120 +232,6 @@ Cokernel of the map
 Q[x,y,z]^(1x12) --> Q[x,y,z]^(1x9),
 
 currently represented by the above matrix
-
-```
-
-```jldoctest
-julia> using HomalgProject
-
-julia> LoadPackageAndExposeGlobals( "GradedModulePresentationsForCAP", Main, all_globals = true )
-
-julia> ℚ = HomalgFieldOfRationalsInSingular( )
-GAP: Q
-
-julia> S = GradedRing( ℚ["x,y"] )
-GAP: Q[x,y]
-(weights: yet unset)
-
-julia> Sgrmod = GradedLeftPresentations( S )
-GAP: The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ])
-
-julia> InfoOfInstalledOperationsOfCategory( Sgrmod )
-40 primitive operations were used to derive 179 operations for this category which
-* IsAbCategory
-* IsMonoidalCategory
-* IsAbelianCategoryWithEnoughProjectives
-
-julia> #ListPrimitivelyInstalledOperationsOfCategory( Sgrmod )
-
-julia> M = GradedFreeLeftPresentation( 2, S, @gap([ 1, 1 ]) )
-GAP: <An object in The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ])>
-
-julia> N = GradedFreeLeftPresentation( 1, S, @gap([ 0 ]) )
-GAP: <An object in The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ])>
-
-julia> mat = HomalgMatrix( "[x,y]", 2, 1, S )
-GAP: <A 2 x 1 matrix over a graded ring>
-
-julia> Display( mat )
-x,
-y
-
-(over a graded ring)
-
-julia> ϕ = GradedPresentationMorphism( M, mat, N )
-GAP: <A morphism in The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ])>
-
-julia> IsWellDefined( ϕ )
-true
-
-julia> IsMonomorphism( ϕ )
-false
-
-julia> IsEpimorphism( ϕ )
-false
-
-julia> ι = ImageEmbedding( ϕ )
-GAP: <A monomorphism in The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ])>
-
-julia> IsMonomorphism( ι )
-true
-
-julia> IsIsomorphism( ι )
-false
-
-julia> coker_mod = CokernelObject( ϕ )
-GAP: <An object in The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ])>
-
-julia> Display( coker_mod )
-x,
-y
-(over a graded ring)
-
-An object in The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ])
-
-(graded, degree of generator:[ 0 ])
-
-julia> IsZero( coker_mod )
-false
-
-julia> is_artinian = GAP.julia_to_gap( M -> AffineDimension( M ) <= 0 );
-
-julia> C = FullSubcategoryByMembershipFunction( Sgrmod, is_artinian );
-
-julia> CohP1 = Sgrmod / C
-GAP: The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: #1
-
-julia> InfoOfInstalledOperationsOfCategory( CohP1 )
-21 primitive operations were used to derive 146 operations for this category which
-* IsAbCategory
-* IsAbelianCategory
-
-julia> Sh = CanonicalProjection( CohP1 )
-GAP: Embedding in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: #1
-
-julia> InstallFunctor( Sh, g"Sheafification" )
-
-julia> ψ = ApplyFunctor( Sh, ϕ )
-GAP: <A morphism in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: #1>
-
-julia> IsMonomorphism( ψ )
-false
-
-julia> IsEpimorphism( ψ )
-true
-
-julia> coker_shv = CokernelObject( ψ )
-GAP: <A zero object in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: #1>
-
-julia> IsZero( coker_shv )
-true
-
-julia> ϵ = ApplyFunctor( Sh, ι )
-GAP: <A morphism in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: #1>
-
-julia> IsIsomorphism( ϵ )
-true
 
 ```
 

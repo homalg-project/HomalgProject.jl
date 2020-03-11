@@ -1,5 +1,6 @@
 using HomalgProject
 using Test
+using Documenter
 
 @testset "HomalgProject.jl" begin
     LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
@@ -23,3 +24,5 @@ using Test
     @test NrRelations( M ) == 12
     @test NrGenerators( M ) == 9
 end
+
+doctest( HomalgProject )
