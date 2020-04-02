@@ -106,14 +106,143 @@ end
 
 export CompileGapPackage
 
+function InstallHomalgAndCAP()
+    
+    res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
+    @assert res
+    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1]*"/pkg/"
+    git = GAP.julia_to_gap("git")
+    clone = GAP.julia_to_gap("clone")
+    
+    homalg_dir = dir * "homalg_project"
+    if ! isdir(homalg_dir)
+        homalg_url = GAP.julia_to_gap("https://github.com/homalg-project/homalg_project.git")
+        print("Cloning into \"" * homalg_dir * "\" ... ")
+        homalg = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), git, clone, homalg_url, GAP.julia_to_gap(homalg_dir));
+        if homalg.code == 0
+            print("done.\n")
+        else
+            print("failed.\n" * GAP.gap_to_julia(homalg.output) * "\n")
+        end
+        code_homalg = homalg.code
+    else
+        code_homalg = 0
+    end
+    
+    cap_dir = dir * "CAP_project"
+    if ! isdir(cap_dir)
+        cap_url = GAP.julia_to_gap("https://github.com/homalg-project/CAP_project.git")
+        print("Cloning into \"" * cap_dir * "\" ... ")
+        cap = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), git, clone, cap_url, GAP.julia_to_gap(cap_dir));
+        if cap.code == 0
+            print("done.\n")
+        else
+            print("failed.\n" * GAP.gap_to_julia(cap.output) * "\n")
+        end
+        code_cap = cap.code
+    else
+        code_cap = 0
+    end
+    
+    return code_homalg == 0 && code_cap == 0
+    
+end
+
+export InstallHomalgAndCAP
+
+function UpdateHomalgAndCAP()
+    
+    if ! InstallHomalgAndCAP( )
+        return false
+    end
+    
+    res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
+    @assert res
+    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1]*"/pkg/"
+    git = GAP.julia_to_gap("git")
+    pull = GAP.julia_to_gap("pull")
+    
+    homalg_dir = dir * "homalg_project"
+    if isdir(homalg_dir)
+        print("Updating \"" * homalg_dir * "\" ... ")
+        homalg = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap(homalg_dir), git, pull, GAP.julia_to_gap("--ff-only"));
+        print(GAP.gap_to_julia(homalg.output))
+        code_homalg = homalg.code
+    else
+        code_homalg = 1
+    end
+    
+    cap_dir = dir * "CAP_project"
+    if isdir(cap_dir)
+        print("Updating \"" * cap_dir * "\" ... ")
+        cap = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap(cap_dir), git, pull, GAP.julia_to_gap("--ff-only"));
+        print(GAP.gap_to_julia(cap.output))
+        code_cap = cap.code
+    else
+        code_cap = 1
+    end
+    
+    return code_homalg == 0 && code_cap == 0
+    
+end
+
+export UpdateHomalgAndCAP
+
+function RemoveHomalgAndCAP()
+    
+    res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
+    @assert res
+    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1]*"/pkg/"
+    rm = GAP.julia_to_gap("rm")
+    opt = GAP.julia_to_gap("-rf")
+    
+    homalg_dir = dir * "homalg_project"
+    if isdir(homalg_dir)
+        homalg = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), rm, opt, GAP.julia_to_gap(homalg_dir));
+        if homalg.code == 0
+            print("done.\n")
+        else
+            print("failed.\n" * GAP.gap_to_julia(homalg.output) * "\n")
+        end
+        code_homalg = homalg.code
+    else
+        code_homalg = 1
+    end
+    
+    cap_dir = dir * "CAP_project"
+    if isdir(cap_dir)
+        cap = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), rm, opt, GAP.julia_to_gap(cap_dir));
+        if cap.code == 0
+            print("done.\n")
+        else
+            print("failed.\n" * GAP.gap_to_julia(cap.output) * "\n")
+        end
+        code_cap = cap.code
+    else
+        code_cap = 1
+    end
+    
+    return code_homalg == 0 && code_cap == 0
+    
+end
+
+export RemoveHomalgAndCAP
+
 function __init__()
     
-    ## add ~/.gap/ to GAPInfo.RootPaths
-    GAP.Globals.ExtendRootDirectories( GAP.julia_to_gap( [ GAP.Globals.UserHomeExpand( GAP.julia_to_gap( "~/.gap/" ) ) ] ) )
+    InstallHomalgAndCAP()
+    
+    homalg = splitdir(splitdir(pathof(HomalgProject))[1])[1]
+    
+    ## Read( "Tools.g" )
+    path = GAP.julia_to_gap(joinpath(joinpath(homalg,"src"),"Tools.g"))
+    GAP.Globals.Read(path)
     
     ## add ~/.julia/.../HomalgProject/ to GAPInfo.RootPaths
-    homalg = splitdir(splitdir(pathof(HomalgProject))[1])[1]
-    GAP.Globals.ExtendRootDirectories( GAP.julia_to_gap( [ GAP.julia_to_gap( homalg*"/" ) ] ) )
+    GAP.Globals.EnhanceRootDirectories( GAP.julia_to_gap( [ GAP.julia_to_gap( homalg*"/" ) ] ) )
+    
+    ## add ~/.gap/ to GAPInfo.RootPaths
+    GAP.Globals.EnhanceRootDirectories( GAP.julia_to_gap( [ GAP.Globals.UserHomeExpand( GAP.julia_to_gap( "~/.gap/" ) ) ] ) )
     
     CompileGapPackage( "Gauss", print_available = false )
     
