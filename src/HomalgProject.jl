@@ -70,16 +70,16 @@ function CompileGapPackage( name; print_available = true )
     
     if GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail
         
-        gap = splitdir(splitdir(pathof(GAP))[1])[1]
-        
-        pkg = GAP.Globals.Filtered( GAP.Globals.PackageInfo( gstr ), a -> splitdir(splitdir(splitdir(GAP.gap_to_julia( a.InstallationPath ))[1])[1])[1] == gap )
+        pkg = GAP.Globals.PackageInfo( gstr )
         
         if GAP.Globals.Length( pkg ) == 0
-            print( "unable to find package named " * name * " in " * gap * "\n\n" )
+            dirs = GAP.gap_to_julia(GAP.Globals.String( GAP.EvalString("List(DirectoriesLibrary(\"pkg\"), d -> Filename(d, \"\"))")))
+            print( "unable to find package named \"" * name * "\" in " * dirs * "\n\n" )
             return false
         end
         
         pkg = pkg[1]
+        
         path = GAP.gap_to_julia( pkg.InstallationPath )
         
         print( "Start compiling " * path * ":\n\n" )
