@@ -23,47 +23,6 @@ end
 
 export HomalgMatrix
 
-function UseExternalSingular( bool::Bool )
-    
-    if bool == false
-        ## LoadPackage( "OscarForHomalg" ) ## needed for LaunchCASJSingularInterpreterForHomalg
-        LoadPackageAndExposeGlobals( "OscarForHomalg", Main, all_globals = true )
-        GAP.Globals.HOMALG_IO_Singular.LaunchCAS = GAP.Globals.LaunchCASJSingularInterpreterForHomalg
-        return true
-    end
-    
-    ## add ~/.julia/.../Singular/deps/usr/bin/ to GAPInfo.DirectoriesSystemPrograms
-    singular = splitdir(splitdir(pathof(Singular))[1])[1]
-    lib = joinpath(splitdir(splitdir(pathof(Singular))[1])[1],"deps","usr","lib")
-    singular = GAP.julia_to_gap(joinpath(singular,"deps","usr","bin"))
-    paths = GAP.Globals.Concatenation( GAP.julia_to_gap( [ singular ] ), GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
-    GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
-    
-    CompileGapPackage( "io", print_available = false )
-    
-    ## LoadPackage( "IO_ForHomalg" ) ## needed when reading LaunchCAS_IO_ForHomalg.g below
-    LoadPackageAndExposeGlobals( "IO_ForHomalg", Main, all_globals = true )
-    
-    ## Read( "LaunchCAS_IO_ForHomalg.g" )
-    homalg = splitdir(splitdir(pathof(HomalgProject))[1])[1]
-    path = GAP.julia_to_gap(joinpath(joinpath(homalg,"src"),"LaunchCAS_IO_ForHomalg.g"))
-    GAP.Globals.Read(path)
-    
-    ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
-    LoadPackageAndExposeGlobals( "RingsForHomalg", Main, all_globals = true )
-    
-    ## add ~/.julia/.../Singular/deps/usr/lib/ to LD_LIBRARY_PATH and DYLD_LIBRARY_PATH
-    lib = [ "LD_LIBRARY_PATH="*lib*":\$LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH="*lib*":\$DYLD_LIBRARY_PATH" ]
-    GAP.Globals.HOMALG_IO_Singular.environment = GAP.julia_to_gap( [GAP.julia_to_gap(lib[1]), GAP.julia_to_gap(lib[2])] )
-    
-    GAP.Globals.HOMALG_IO_Singular.LaunchCAS = false
-    
-    return true
-    
-end
-
-export UseExternalSingular
-
 function CompileGapPackage( name; print_available = true )
     
     gstr = GAP.julia_to_gap( name )
@@ -105,6 +64,47 @@ function CompileGapPackage( name; print_available = true )
 end
 
 export CompileGapPackage
+
+function UseExternalSingular( bool::Bool )
+    
+    if bool == false
+        ## LoadPackage( "OscarForHomalg" ) ## needed for LaunchCASJSingularInterpreterForHomalg
+        LoadPackageAndExposeGlobals( "OscarForHomalg", Main, all_globals = true )
+        GAP.Globals.HOMALG_IO_Singular.LaunchCAS = GAP.Globals.LaunchCASJSingularInterpreterForHomalg
+        return true
+    end
+    
+    ## add ~/.julia/.../Singular/deps/usr/bin/ to GAPInfo.DirectoriesSystemPrograms
+    singular = splitdir(splitdir(pathof(Singular))[1])[1]
+    lib = joinpath(splitdir(splitdir(pathof(Singular))[1])[1],"deps","usr","lib")
+    singular = GAP.julia_to_gap(joinpath(singular,"deps","usr","bin"))
+    paths = GAP.Globals.Concatenation( GAP.julia_to_gap( [ singular ] ), GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
+    GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
+    
+    CompileGapPackage( "io", print_available = false )
+    
+    ## LoadPackage( "IO_ForHomalg" ) ## needed when reading LaunchCAS_IO_ForHomalg.g below
+    LoadPackageAndExposeGlobals( "IO_ForHomalg", Main, all_globals = true )
+    
+    ## Read( "LaunchCAS_IO_ForHomalg.g" )
+    homalg = splitdir(splitdir(pathof(HomalgProject))[1])[1]
+    path = GAP.julia_to_gap(joinpath(joinpath(homalg,"src"),"LaunchCAS_IO_ForHomalg.g"))
+    GAP.Globals.Read(path)
+    
+    ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
+    LoadPackageAndExposeGlobals( "RingsForHomalg", Main, all_globals = true )
+    
+    ## add ~/.julia/.../Singular/deps/usr/lib/ to LD_LIBRARY_PATH and DYLD_LIBRARY_PATH
+    lib = [ "LD_LIBRARY_PATH="*lib*":\$LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH="*lib*":\$DYLD_LIBRARY_PATH" ]
+    GAP.Globals.HOMALG_IO_Singular.environment = GAP.julia_to_gap( [GAP.julia_to_gap(lib[1]), GAP.julia_to_gap(lib[2])] )
+    
+    GAP.Globals.HOMALG_IO_Singular.LaunchCAS = false
+    
+    return true
+    
+end
+
+export UseExternalSingular
 
 function InstallHomalgAndCAP()
     
