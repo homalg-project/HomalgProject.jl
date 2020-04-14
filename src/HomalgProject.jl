@@ -43,7 +43,7 @@ function CompileGapPackage( name; print_available = true )
         
         print( "Start compiling " * path * ":\n\n" )
         cd(path)
-        run(`./configure`)
+        run(`./configure --with-gaproot=$(GAP.GAPROOT)`)
         run(`make -j$(Sys.CPU_THREADS)`)
         if GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail
             print( "\nThe compilation of the package " * name * " failed.\n\n" )
