@@ -7,8 +7,6 @@
 LoadPackage( "OscarForHomalg" );
 LoadPackage( "Modules" );
 
-HOMALG_IO.show_banners := false;
-
 TestDirectory( DirectoriesPackageLibrary( "OscarForHomalg", "tst" ),
   rec(
         testOptions := rec ( compareFunction := "uptowhitespace" ),
