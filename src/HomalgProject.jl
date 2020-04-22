@@ -106,131 +106,95 @@ end
 
 export UseExternalSingular
 
-function InstallHomalgAndCAP()
+function InstallPackageFromHomalgProject( pkgname )
     
     res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
     @assert res
-    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1]*"/pkg/"
+    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1] * "/pkg/"
     git = GAP.julia_to_gap("git")
     clone = GAP.julia_to_gap("clone")
     
-    homalg_dir = dir * "homalg_project"
-    if ! isdir(homalg_dir)
-        homalg_url = GAP.julia_to_gap("https://github.com/homalg-project/homalg_project.git")
-        print("Cloning into \"" * homalg_dir * "\" ... ")
-        homalg = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), git, clone, homalg_url, GAP.julia_to_gap(homalg_dir));
-        if homalg.code == 0
-            print("done.\n")
-        else
-            print("failed.\n" * GAP.gap_to_julia(homalg.output) * "\n")
-        end
-        code_homalg = homalg.code
-    else
-        code_homalg = 0
+    dir = dir * pkgname
+    
+    if isdir(dir)
+        return true
     end
     
-    cap_dir = dir * "CAP_project"
-    if ! isdir(cap_dir)
-        cap_url = GAP.julia_to_gap("https://github.com/homalg-project/CAP_project.git")
-        print("Cloning into \"" * cap_dir * "\" ... ")
-        cap = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), git, clone, cap_url, GAP.julia_to_gap(cap_dir));
-        if cap.code == 0
-            print("done.\n")
-        else
-            print("failed.\n" * GAP.gap_to_julia(cap.output) * "\n")
-        end
-        code_cap = cap.code
-    else
-        code_cap = 0
-    end
+    pkgname = GAP.julia_to_gap("https://github.com/homalg-project/" * pkgname)
+    print("Cloning into \"" * dir * "\" ... ")
+    pkgname = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), git, clone, pkgname, GAP.julia_to_gap(dir));
     
-    return code_homalg == 0 && code_cap == 0
-    
-end
-
-export InstallHomalgAndCAP
-
-function UpdateHomalgAndCAP()
-    
-    if ! InstallHomalgAndCAP( )
+    if pkgname.code != 0
+        print("failed.\n" * GAP.gap_to_julia(pkgname.output) * "\n")
         return false
     end
     
+    print("done.\n")
+    return true
+    
+end
+    
+export InstallPackageFromHomalgProject
+
+function UpdatePackageFromHomalgProject( pkgname )
+    
     res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
     @assert res
-    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1]*"/pkg/"
+    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1] * "/pkg/"
     git = GAP.julia_to_gap("git")
     pull = GAP.julia_to_gap("pull")
     
-    homalg_dir = dir * "homalg_project"
-    if isdir(homalg_dir)
-        print("Updating \"" * homalg_dir * "\" ... ")
-        homalg = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap(homalg_dir), git, pull, GAP.julia_to_gap("--ff-only"));
-        print(GAP.gap_to_julia(homalg.output))
-        code_homalg = homalg.code
-    else
-        code_homalg = 1
+    dir = dir * pkgname
+    
+    if ! isdir(dir)
+        return InstallPackageFromHomalgProject( pkgname )
     end
     
-    cap_dir = dir * "CAP_project"
-    if isdir(cap_dir)
-        print("Updating \"" * cap_dir * "\" ... ")
-        cap = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap(cap_dir), git, pull, GAP.julia_to_gap("--ff-only"));
-        print(GAP.gap_to_julia(cap.output))
-        code_cap = cap.code
-    else
-        code_cap = 1
+    print("Updating \"" * dir * "\" ... ")
+    pkgname = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap(dir), git, pull, GAP.julia_to_gap("--ff-only"));
+    print(GAP.gap_to_julia(pkgname.output))
+    
+    if pkgname.code != 0
+        return false
     end
     
-    return code_homalg == 0 && code_cap == 0
+    return true
     
 end
 
-export UpdateHomalgAndCAP
+export UpdatePackageFromHomalgProject
 
-function RemoveHomalgAndCAP()
+function RemovePackageFromHomalgProject( pkgname )
     
     res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
     @assert res
-    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1]*"/pkg/"
+    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1] * "/pkg/"
     rm = GAP.julia_to_gap("rm")
     opt = GAP.julia_to_gap("-rf")
     
-    homalg_dir = dir * "homalg_project"
-    if isdir(homalg_dir)
-        homalg = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), rm, opt, GAP.julia_to_gap(homalg_dir));
-        if homalg.code == 0
-            print("done.\n")
-        else
-            print("failed.\n" * GAP.gap_to_julia(homalg.output) * "\n")
-        end
-        code_homalg = homalg.code
-    else
-        code_homalg = 1
+    dir = dir * pkgname
+    
+    if ! isdir(dir)
+        return false
     end
     
-    cap_dir = dir * "CAP_project"
-    if isdir(cap_dir)
-        cap = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), rm, opt, GAP.julia_to_gap(cap_dir));
-        if cap.code == 0
-            print("done.\n")
-        else
-            print("failed.\n" * GAP.gap_to_julia(cap.output) * "\n")
-        end
-        code_cap = cap.code
-    else
-        code_cap = 1
+    pkgname = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), rm, opt, GAP.julia_to_gap(dir));
+    
+    if pkgname.code != 0
+        print("failed.\n" * GAP.gap_to_julia(pkgname.output) * "\n")
+        return false
     end
     
-    return code_homalg == 0 && code_cap == 0
+    return true
     
 end
 
-export RemoveHomalgAndCAP
+export RemovePackageFromHomalgProject
 
 function __init__()
     
-    InstallHomalgAndCAP()
+    InstallPackageFromHomalgProject( "homalg_project" )
+    InstallPackageFromHomalgProject( "CAP_project" )
     
     homalg = splitdir(splitdir(pathof(HomalgProject))[1])[1]
     
