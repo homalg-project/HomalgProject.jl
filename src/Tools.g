@@ -19,4 +19,3 @@ InstallGlobalFunction( EnhanceRootDirectories, function( rootpaths )
       fi;
     fi;
 end );
-

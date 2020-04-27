@@ -2,13 +2,19 @@
 
 ## Introduction
 
-`HomalgProject.jl` is an extension of [`GAP.jl`](https://github.com/oscar-system/GAP.jl)
-providing simplified access to
-  * [homalg project](https://homalg-project.github.io),
-  * [CAP project](https://homalg-project.github.io/CAP_project/).
-These are open source [GAP4](https://www.gap-system.org) multi-package projects
-for constructive category theory and homological algebra with applications
-to module theory of commutative and non-commutative algebras and algebraic geometry.
+The [Julia](https://julialang.org/) package `HomalgProject` provides
+simplified access to the repositories of the
+[GAP](https://www.gap-system.org) packages hosted at the GitHub
+organisation https://github.com/homalg-project, most of which are
+based on the
+
+* [CAP project](https://github.com/homalg-project/CAP_project/),
+* [homalg project](https://github.com/homalg-project/homalg_project/).
+
+These are open source [GAP](https://www.gap-system.org) multi-package
+projects for constructive category theory and homological algebra with
+applications to module theory of commutative and non-commutative
+algebras and algebraic geometry.
 
 ## Installation
 

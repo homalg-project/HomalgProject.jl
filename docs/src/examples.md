@@ -34,6 +34,7 @@ DocTestSetup = quote
     CokernelObject = GAP.Globals.CokernelObject
     IsZero = GAP.Globals.IsZero
     AffineDimension = GAP.Globals.AffineDimension
+    SetNameFunction = GAP.Globals.SetNameFunction
     FullSubcategoryByMembershipFunction = GAP.Globals.FullSubcategoryByMembershipFunction
     / = GAP.Globals.QUO
     CanonicalProjection = GAP.Globals.CanonicalProjection
@@ -47,9 +48,6 @@ end
 julia> using HomalgProject
 
 julia> LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
-
-julia> UseExternalSingular( false )
-true
 
 julia> ℚ = HomalgFieldOfRationalsInSingular( )
 GAP: Q
@@ -340,10 +338,13 @@ false
 
 julia> is_artinian = GAP.julia_to_gap( M -> AffineDimension( M ) <= 0 );
 
-julia> C = FullSubcategoryByMembershipFunction( Sgrmod, is_artinian );
+julia> SetNameFunction( is_artinian, g"is_artinian" )
+
+julia> C = FullSubcategoryByMembershipFunction( Sgrmod, is_artinian )
+GAP: <Subcategory of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by is_artinian>
 
 julia> CohP1 = Sgrmod / C
-GAP: The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: #1
+GAP: The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: is_artinian
 
 julia> InfoOfInstalledOperationsOfCategory( CohP1 )
 21 primitive operations were used to derive 146 operations for this category which
@@ -351,12 +352,12 @@ julia> InfoOfInstalledOperationsOfCategory( CohP1 )
 * IsAbelianCategory
 
 julia> Sh = CanonicalProjection( CohP1 )
-GAP: Embedding in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: #1
+GAP: Embedding in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: is_artinian
 
 julia> InstallFunctor( Sh, g"Sheafification" )
 
 julia> ψ = ApplyFunctor( Sh, ϕ )
-GAP: <A morphism in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: #1>
+GAP: <A morphism in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: is_artinian>
 
 julia> IsMonomorphism( ψ )
 false
@@ -365,13 +366,13 @@ julia> IsEpimorphism( ψ )
 true
 
 julia> coker_shv = CokernelObject( ψ )
-GAP: <A zero object in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: #1>
+GAP: <A zero object in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: is_artinian>
 
 julia> IsZero( coker_shv )
 true
 
 julia> ϵ = ApplyFunctor( Sh, ι )
-GAP: <A morphism in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: #1>
+GAP: <A morphism in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: is_artinian>
 
 julia> IsIsomorphism( ϵ )
 true

@@ -1,4 +1,4 @@
-using Documenter, HomalgProject
+using Documenter, DocumenterMarkdown, HomalgProject
 
 makedocs(;
     modules  = [HomalgProject],
