@@ -4,8 +4,8 @@ using Documenter
 
 @testset "HomalgProject.jl" begin
     RemovePackageFromHomalgProject( "HomalgProject.jl" )
-    @test InstallPackageFromHomalgProject( "HomalgProject.jl" )
-    @test InstallPackageFromHomalgProject( "HomalgProject.jl" )
+    @test DownloadPackageFromHomalgProject( "HomalgProject.jl" )
+    @test DownloadPackageFromHomalgProject( "HomalgProject.jl" )
     @test UpdatePackageFromHomalgProject( "HomalgProject.jl" )
     @test UpdatePackageFromHomalgProject( "HomalgProject.jl" )
     @test RemovePackageFromHomalgProject( "HomalgProject.jl" )

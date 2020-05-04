@@ -1,6 +1,6 @@
 @doc Markdown.doc"""
 The Julia package `HomalgProject` provides simplified access to the
-repositories of the GAP packages hosted at the GitHub organisation
+repositories of the GAP packages hosted at the GitHub organization
 https://github.com/homalg-project, most of which are based on the
 
 * [CAP project](https://github.com/homalg-project/CAP_project/),
@@ -11,7 +11,49 @@ category theory and homological algebra with applications to module
 theory of commutative and non-commutative algebras and algebraic
 geometry.
 
-The source code repository and the online documentation can be found at
+## Software dependency
+
+`HomalgProject` relies on the
+
+| computer algebra systems | through the Julia packages |
+|:------------------------:|:--------------------------:|
+| GAP                      | Gap.jl                     |
+| Nemo                     | Nemo is written in Julia   |
+| Singular                 | Singular.jl                |
+
+all of which are components of the computer algebra system
+[OSCAR](https://oscar.computeralgebra.de/).
+
+Some of the bundled packages use the GAP packages
+
+* IO
+* ferret
+* json
+* QPA2
+
+and the
+
+| third party software | through the GAP packages |
+|:--------------------:|:------------------------:|
+| cddlib               | CddInterface             |
+| 4ti2                 | 4ti2Interface            |
+| Normaliz             | NormalizInterface        |
+
+## General Disclaimer
+
+The software comes with absolutely no warranty and will most likely have errors. If you use it for computations, please check the correctness of the result very carefully.
+
+This software is licensed under the LGPL, version 3, or any later version.
+
+## Funding
+
+*The development of both software projects was partially funded by the
+DFG (German Research Foundation) through the [Special Priority Project
+SPP 1489](https://spp.computeralgebra.de/) and the [Transregional
+Collaborative Research Centre SFB-TRR
+195](https://www.computeralgebra.de/sfb/).*
+
+More information and the online documentation can be found at the source code repository
 
 https://github.com/homalg-project/HomalgProject.jl
 """
@@ -22,10 +64,10 @@ greet() = print("The homalg project compatibility package for Julia")
 import Base: getindex
 
 import GAP
-import GAP: LoadPackageAndExposeGlobals, @g_str, @gap
+import GAP: LoadPackageAndExposeGlobals, @g_str, @gap, GapObj
 
 export GAP
-export LoadPackageAndExposeGlobals, @g_str, @gap
+export LoadPackageAndExposeGlobals, @g_str, @gap, GapObj
 
 import Singular
 import Singular.libSingular: call_interpreter
@@ -44,64 +86,26 @@ end
 
 export HomalgMatrix
 
-function CompileGapPackage( name; print_available = true )
-    
-    gstr = GAP.julia_to_gap( name )
-    
-    if GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail
-        
-        pkg = GAP.Globals.PackageInfo( gstr )
-        
-        if GAP.Globals.Length( pkg ) == 0
-            dirs = GAP.gap_to_julia(GAP.Globals.String( GAP.EvalString("List(DirectoriesLibrary(\"pkg\"), d -> Filename(d, \"\"))")))
-            @warn "unable to find package named \"" * name * "\" in " * dirs
-            return false
-        end
-        
-        pkg = pkg[1]
-        
-        path = GAP.gap_to_julia( pkg.InstallationPath )
-        
-        @info "Compiling \"" * path, "\""
-        cd(path)
-        run(`./configure --with-gaproot=$(GAP.GAPROOT)`)
-        run(`make -j$(Sys.CPU_THREADS)`)
-        if GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail
-            @warn "Compiling the package \"" * name * "\" failed."
-            return false
-        end
-        
-        @info "Compiling the package \"" * name * "\" was successful."
-        return true
-        
-    end
-    
-    if print_available == true
-        @warn "Package \"" * name * "\" is already installed."
-    end
-    
-    return true
-    
-end
+include("../deps/homalg-project.jl")
 
-export CompileGapPackage
+global PATH_TO_SINGULAR = dirname(dirname(pathof(Singular)))
 
+##
 function UseExternalSingular( bool::Bool )
     
     if bool == false
         ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
         LoadPackageAndExposeGlobals( "RingsForHomalg", Main, all_globals = true )
         ## Read( "LaunchCAS_JSingularInterpreterForHomalg.g" )
-        homalg = splitdir(splitdir(pathof(HomalgProject))[1])[1]
-        path = GAP.julia_to_gap(joinpath(homalg,"src","LaunchCAS_JSingularInterpreterForHomalg.g"))
+        path = GAP.julia_to_gap(joinpath(HOMALG_PROJECT_PATH,"src","LaunchCAS_JSingularInterpreterForHomalg.g"))
         GAP.Globals.Read(path)
         GAP.Globals.HOMALG_IO_Singular.LaunchCAS = GAP.Globals.LaunchCAS_JSingularInterpreterForHomalg_preload
         return true
     end
-    
+
     ## add ~/.julia/.../Singular/deps/usr/bin/ to GAPInfo.DirectoriesSystemPrograms
-    singular = splitdir(splitdir(pathof(Singular))[1])[1]
-    lib = joinpath(splitdir(splitdir(pathof(Singular))[1])[1],"deps","usr","lib")
+    singular = PATH_TO_SINGULAR
+    lib = joinpath(singular,"deps","usr","lib")
     singular = GAP.julia_to_gap(joinpath(singular,"deps","usr","bin"))
     paths = GAP.Globals.Concatenation( GAP.julia_to_gap( [ singular ] ), GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
     GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
@@ -125,92 +129,6 @@ function UseExternalSingular( bool::Bool )
 end
 
 export UseExternalSingular
-
-function InstallPackageFromHomalgProject( pkgname )
-    
-    res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
-    @assert res
-    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1] * "/pkg/"
-    git = GAP.julia_to_gap("git")
-    clone = GAP.julia_to_gap("clone")
-    
-    dir = dir * pkgname
-    
-    if isdir(dir)
-        return true
-    end
-    
-    @info "Cloning into \"" * dir * "\" ... "
-    pkgname = GAP.julia_to_gap("https://github.com/homalg-project/" * pkgname)
-    pkgname = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), git, clone, pkgname, GAP.julia_to_gap(dir));
-    
-    if pkgname.code != 0
-        @warn "Cloning failed:\n" * GAP.gap_to_julia(pkgname.output)
-        return false
-    end
-    
-    return true
-    
-end
-    
-export InstallPackageFromHomalgProject
-
-function UpdatePackageFromHomalgProject( pkgname )
-    
-    res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
-    @assert res
-    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1] * "/pkg/"
-    git = GAP.julia_to_gap("git")
-    pull = GAP.julia_to_gap("pull")
-    
-    dir = dir * pkgname
-    
-    if ! isdir(dir)
-        return InstallPackageFromHomalgProject( pkgname )
-    end
-    
-    @info "Updating \"" * dir * "\" ... "
-    pkgname = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap(dir), git, pull, GAP.julia_to_gap("--ff-only"));
-    
-    if pkgname.code != 0
-        @warn "Updating failed:\n" * GAP.gap_to_julia(pkgname.output)
-        return false
-    end
-    
-    @info GAP.gap_to_julia(pkgname.output)
-    return true
-    
-end
-
-export UpdatePackageFromHomalgProject
-
-function RemovePackageFromHomalgProject( pkgname )
-    
-    res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
-    @assert res
-    dir = splitdir(splitdir(pathof(HomalgProject))[1])[1] * "/pkg/"
-    rm = GAP.julia_to_gap("rm")
-    opt = GAP.julia_to_gap("-rf")
-    
-    dir = dir * pkgname
-    
-    if ! isdir(dir)
-        return false
-    end
-    
-    @info "Removing \"" * dir * "\""
-    pkgname = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), rm, opt, GAP.julia_to_gap(dir));
-    
-    if pkgname.code != 0
-        @warn "Remving failed:\n" * GAP.gap_to_julia(pkgname.output)
-        return false
-    end
-    
-    return true
-    
-end
-
-export RemovePackageFromHomalgProject
 
 if VERSION >= v"1.4"
     deps = Pkg.dependencies()
@@ -249,32 +167,35 @@ export HOMALG_INITIALIZED
 
 function __init__()
     
-    InstallPackageFromHomalgProject( "homalg_project" )
-    InstallPackageFromHomalgProject( "CAP_project" )
-    InstallPackageFromHomalgProject( "OscarForHomalg" )
-    
-    homalg = splitdir(splitdir(pathof(HomalgProject))[1])[1]
+    DownloadPackageFromHomalgProject( "homalg_project" )
+    DownloadPackageFromHomalgProject( "CAP_project" )
+    DownloadPackageFromHomalgProject( "OscarForHomalg" )
     
     ## Read( "Tools.g" )
-    path = GAP.julia_to_gap(joinpath(homalg,"src","Tools.g"))
+    path = GAP.julia_to_gap(joinpath( HOMALG_PROJECT_PATH, "src", "Tools.g" ))
     GAP.Globals.Read(path)
-    
-    ## add ~/.julia/.../HomalgProject/ to GAPInfo.RootPaths
-    GAP.Globals.EnhanceRootDirectories( GAP.julia_to_gap( [ GAP.julia_to_gap( homalg * "/" ) ] ) )
     
     ## add ~/.gap/ to GAPInfo.RootPaths
     GAP.Globals.EnhanceRootDirectories( GAP.julia_to_gap( [ GAP.Globals.UserHomeExpand( GAP.julia_to_gap( "~/.gap/" ) ) ] ) )
     
-    CompileGapPackage( "Gauss", print_available = false )
+    ## add ~/.julia/.../HomalgProject/ to GAPInfo.RootPaths
+    GAP.Globals.EnhanceRootDirectories( GAP.julia_to_gap( [ GAP.julia_to_gap( HOMALG_PROJECT_PATH * "/" ) ] ) )
     
     UseExternalSingular( true )
     UseExternalSingular( false )
     
-    if isinteractive()
-        #print("Version")
-        #printstyled(" $VERSION_NUMBER ", color = :green)
-        #println()
-        #println("Type: ?HomalgProject for more information")
+    if haskey(ENV, "HOMALG_PROJECT_SHOW_BANNER")
+        show_banner = ENV["HOMALG_PROJECT_SHOW_BANNER"] == "true"
+    else
+        show_banner = isinteractive() &&
+                !any(x->x.name in ["Oscar"], keys(Base.package_locks))
+    end
+    
+    if show_banner
+        print("Version")
+        printstyled(" $VERSION_NUMBER\n", color = :green)
+        println("Using the OSCAR components GAP, Nemo, and Singular")
+        println("Type: ?HomalgProject for more information")
     end
     
     global HOMALG_INITIALIZED = true
