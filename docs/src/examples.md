@@ -352,7 +352,7 @@ julia> InfoOfInstalledOperationsOfCategory( CohP1 )
 * IsAbelianCategory
 
 julia> Sh = CanonicalProjection( CohP1 )
-GAP: Embedding in The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: is_artinian
+GAP: Localization functor of The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: is_artinian
 
 julia> InstallFunctor( Sh, g"Sheafification" )
 
