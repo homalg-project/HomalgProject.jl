@@ -1,10 +1,10 @@
 global HOMALG_PROJECT_PATH = dirname( @__DIR__ )
 
-function CompileGapPackage( name; print_available = true, install_script = false )
+function CompileGapPackage( name; print_available = true, install_script = false, test_availability = true )
     
     gstr = GAP.julia_to_gap( name )
     
-    if GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail
+    if ( test_availability == false ) || ( GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail )
         
         pkg = GAP.Globals.PackageInfo( gstr )
         
@@ -23,8 +23,12 @@ function CompileGapPackage( name; print_available = true, install_script = false
         cd(path)
         
         if install_script == false
-            run(`./configure --with-gaproot=$(GAP.GAPROOT)`)
-            run(`make -j$(Sys.CPU_THREADS)`)
+            if name in PACKAGES_WITH_OLD_CONFIGURE
+                run(`./configure $(GAP.GAPROOT)`)
+            else
+                run(`./configure --with-gaproot=$(GAP.GAPROOT)`)
+            end
+            run(`make -k -j$(Sys.CPU_THREADS)`) ## -k = Keep going when some targets can't be made.
         else
             run(`$(install_script) $(GAP.GAPROOT)`)
         end
@@ -191,14 +195,21 @@ global PACKAGES_BASED_ON_CAP =
       ]
 
 global PACKAGES_TO_COMPILE =
-    [ "io",
-      #"Browse", ## as of version 1.8.8: configure script does not yet understand the option --with-gaproot
-      "Gauss",
+    [ "Gauss",
+      #"Browse", ## do not compile browse as it results into GAP raising the error "Error opening terminal: xterm-256color."
+      "io",
       "digraphs",
       "ferret",
       "json",
+      "orb",
       ]
 
+global PACKAGES_WITH_OLD_CONFIGURE  =
+    [ "Browse",
+      "Gauss",
+      "orb",
+      ]
+    
 global PACKAGES_DOWNLOADING_EXTERNAL_CODE =
     [ "CddInterface",
       "NormalizInterface",
