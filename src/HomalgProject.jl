@@ -175,10 +175,10 @@ function __init__()
     path = GAP.julia_to_gap(joinpath( HOMALG_PROJECT_PATH, "src", "Tools.g" ))
     GAP.Globals.Read(path)
     
-    ## add ~/.gap/ to GAPInfo.RootPaths
-    GAP.Globals.EnhanceRootDirectories( GAP.julia_to_gap( [ GAP.Globals.UserHomeExpand( GAP.julia_to_gap( "~/.gap/" ) ) ] ) )
+    ## add "~/.gap/" at the end of GAPInfo.RootPaths
+    GAP.Globals.ExtendRootDirectories( GAP.julia_to_gap( [ GAP.Globals.UserHomeExpand( GAP.julia_to_gap( "~/.gap/" ) ) ] ) )
     
-    ## add ~/.julia/.../HomalgProject/ to GAPInfo.RootPaths
+    ## add "~/.julia/.../HomalgProject/" at the beginning of GAPInfo.RootPaths
     GAP.Globals.EnhanceRootDirectories( GAP.julia_to_gap( [ GAP.julia_to_gap( HOMALG_PROJECT_PATH * "/" ) ] ) )
     
     UseExternalSingular( true )
