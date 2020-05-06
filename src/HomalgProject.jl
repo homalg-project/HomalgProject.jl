@@ -18,7 +18,7 @@ geometry.
 | computer algebra systems | through the Julia packages |
 |:------------------------:|:--------------------------:|
 | GAP                      | Gap.jl                     |
-| Nemo                     | Nemo is written in Julia   |
+| Nemo                     | Nemo = Nemo.jl             |
 | Singular                 | Singular.jl                |
 
 all of which are components of the computer algebra system
