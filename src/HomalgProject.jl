@@ -192,9 +192,9 @@ function __init__()
     end
     
     if show_banner
-        print("Version")
-        printstyled(" $VERSION_NUMBER\n", color = :green)
-        println("Using the OSCAR components GAP, Nemo, and Singular")
+        print("HomalgProject v")
+        printstyled("$VERSION_NUMBER\n", color = :green)
+        println("Imported OSCAR's components GAP, Nemo, and Singular")
         println("Type: ?HomalgProject for more information")
     end
     
