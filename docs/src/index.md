@@ -28,7 +28,7 @@ After each update of the Julia package `GAP` a rebuild is (probably) necessary:
 
 ```julia
 julia> using Pkg
-julia Pkg.build("HomalgProject")
+julia> Pkg.build("HomalgProject")
 ```
 
 This will (re)compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE`.
