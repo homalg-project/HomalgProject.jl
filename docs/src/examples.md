@@ -10,8 +10,8 @@ The following examples tests the functionality of the software projects
 DocTestSetup = quote
     using HomalgProject
     GAP.Globals.SizeScreen( GAP.julia_to_gap( [ 4096 ] ) )
-    LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
-    LoadPackageAndExposeGlobals( "GradedModulePresentationsForCAP", Main, all_globals = true )
+    LoadPackage( "GradedModules" )
+    LoadPackage( "GradedModulePresentationsForCAP" )
     GAP.Globals.HOMALG_IO.show_banners = false
     HomalgFieldOfRationalsInSingular = GAP.Globals.HomalgFieldOfRationalsInSingular
     LeftPresentation = GAP.Globals.LeftPresentation
@@ -47,7 +47,7 @@ end
 ```jldoctest
 julia> using HomalgProject
 
-julia> LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
+julia> LoadPackage( "GradedModules" )
 
 julia> ℚ = HomalgFieldOfRationalsInSingular( )
 GAP: Q
@@ -264,7 +264,7 @@ currently represented by the above matrix
 ```jldoctest
 julia> using HomalgProject
 
-julia> LoadPackageAndExposeGlobals( "GradedModulePresentationsForCAP", Main, all_globals = true )
+julia> LoadPackage( "GradedModulePresentationsForCAP" )
 
 julia> ℚ = HomalgFieldOfRationalsInSingular( )
 GAP: Q

@@ -80,6 +80,12 @@ import Markdown
 Base.:*(x::GAP.GapObj,y::String) = x*GAP.julia_to_gap(y)
 Base.getindex(x::GAP.GapObj,y::String) = GAP.Globals.ELM_LIST(x,GAP.julia_to_gap(y))
 
+function LoadPackage( pkgname::String )
+    LoadPackageAndExposeGlobals( pkgname, Main, all_globals = true )
+end
+
+export LoadPackage
+
 function HomalgMatrix( M::String, m::Int64, n::Int64, R::GAP.GapObj )
     return GAP.Globals.HomalgMatrix( GAP.julia_to_gap( M ), m, n, R )
 end
@@ -95,7 +101,7 @@ function UseExternalSingular( bool::Bool )
     
     if bool == false
         ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
-        LoadPackageAndExposeGlobals( "RingsForHomalg", Main, all_globals = true )
+        LoadPackage( "RingsForHomalg" )
         ## Read( "LaunchCAS_JSingularInterpreterForHomalg.g" )
         path = GAP.julia_to_gap(joinpath(HOMALG_PROJECT_PATH,"src","LaunchCAS_JSingularInterpreterForHomalg.g"))
         GAP.Globals.Read(path)
@@ -113,10 +119,10 @@ function UseExternalSingular( bool::Bool )
     CompileGapPackage( "io", print_available = false )
     
     ## LoadPackage( "IO_ForHomalg" ) ## needed when reading LaunchCAS_IO_ForHomalg.g below
-    LoadPackageAndExposeGlobals( "IO_ForHomalg", Main, all_globals = true )
+    LoadPackage( "IO_ForHomalg" )
     
     ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
-    LoadPackageAndExposeGlobals( "RingsForHomalg", Main, all_globals = true )
+    LoadPackage( "RingsForHomalg" )
     
     ## add ~/.julia/.../Singular/deps/usr/lib/ to LD_LIBRARY_PATH and DYLD_LIBRARY_PATH
     lib = [ "LD_LIBRARY_PATH=" * lib * ":\$LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH=" * lib * ":\$DYLD_LIBRARY_PATH" ]

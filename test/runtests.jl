@@ -11,7 +11,7 @@ using Documenter
     @test RemovePackageFromHomalgProject( "HomalgProject.jl" )
     @test ! RemovePackageFromHomalgProject( "HomalgProject.jl" )
     @test UseExternalSingular( false )
-    LoadPackageAndExposeGlobals( "GradedModules", Main, all_globals = true )
+    LoadPackage( "GradedModules" )
     ℚ = HomalgFieldOfRationalsInSingular( )
     R = ℚ["x,y,z"]
     m = "[ x*y,y*z,z,0,0, x^3*z,x^2*z^2,0,x*z^2,-z^2, x^4,x^3*z,0,x^2*z,-x*z, 0,0,x*y,-y^2,x^2-1, 0,0,x^2*z,-x*y*z,y*z, 0,0,x^2*y-x^2,-x*y^2+x*y,y^2-y]";
