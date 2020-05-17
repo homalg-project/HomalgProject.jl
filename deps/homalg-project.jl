@@ -195,9 +195,10 @@ global PACKAGES_BASED_ON_CAP =
       ]
 
 global PACKAGES_TO_COMPILE =
-    [ "Gauss",
+    [ #"Gauss", ## compile with test_availability = false
       #"Browse", ## do not compile browse as it results into GAP raising the error "Error opening terminal: xterm-256color."
       "io",
+      #"grape", ## compile with test_availability = false
       "digraphs",
       "ferret",
       "json",
@@ -207,6 +208,7 @@ global PACKAGES_TO_COMPILE =
 global PACKAGES_WITH_OLD_CONFIGURE  =
     [ "Browse",
       "Gauss",
+      "grape",
       "orb",
       ]
     
