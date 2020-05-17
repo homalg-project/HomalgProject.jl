@@ -108,23 +108,24 @@ function UseExternalSingular( bool::Bool )
         GAP.Globals.HOMALG_IO_Singular.LaunchCAS = GAP.Globals.LaunchCAS_JSingularInterpreterForHomalg_preload
         return true
     end
-
+    
     ## add ~/.julia/.../Singular/deps/usr/bin/ to GAPInfo.DirectoriesSystemPrograms
-    singular = PATH_TO_SINGULAR
-    lib = joinpath(singular,"deps","usr","lib")
-    singular = GAP.julia_to_gap(joinpath(singular,"deps","usr","bin"))
+    singular = GAP.julia_to_gap(joinpath(PATH_TO_SINGULAR,"deps","usr","bin"))
     paths = GAP.Globals.Concatenation( GAP.julia_to_gap( [ singular ] ), GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
+    paths = GAP.Globals.Unique( paths )
     GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
+    GAP.Globals.GAPInfo.DirectoriesPrograms = GAP.Globals.List( GAP.Globals.GAPInfo.DirectoriesSystemPrograms, GAP.Globals.Directory )
     
     CompileGapPackage( "io", print_available = false )
     
-    ## LoadPackage( "IO_ForHomalg" ) ## needed when reading LaunchCAS_IO_ForHomalg.g below
+    ## loading IO_ForHomalg now suppresses its banner later
     LoadPackage( "IO_ForHomalg" )
     
     ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
     LoadPackage( "RingsForHomalg" )
     
     ## add ~/.julia/.../Singular/deps/usr/lib/ to LD_LIBRARY_PATH and DYLD_LIBRARY_PATH
+    lib = joinpath(PATH_TO_SINGULAR,"deps","usr","lib")
     lib = [ "LD_LIBRARY_PATH=" * lib * ":\$LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH=" * lib * ":\$DYLD_LIBRARY_PATH" ]
     GAP.Globals.HOMALG_IO_Singular.environment = GAP.julia_to_gap( [GAP.julia_to_gap(lib[1]), GAP.julia_to_gap(lib[2])] )
     
