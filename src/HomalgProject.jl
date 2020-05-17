@@ -38,6 +38,7 @@ and the
 | cddlib               | CddInterface             |
 | 4ti2                 | 4ti2Interface            |
 | Normaliz             | NormalizInterface        |
+| Graphviz             | Digraphs                 |
 
 ## General Disclaimer
 
