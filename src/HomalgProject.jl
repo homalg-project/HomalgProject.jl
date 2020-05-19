@@ -172,10 +172,6 @@ global HOMALG_VERSION_NUMBER = VERSION_NUMBER
 
 export HOMALG_VERSION_NUMBER
 
-global HOMALG_INITIALIZED = false
-
-export HOMALG_INITIALIZED
-
 function __init__()
     
     DownloadPackageFromHomalgProject( "homalg_project" )
@@ -217,8 +213,6 @@ function __init__()
         println("Imported OSCAR's components GAP, Nemo, and Singular")
         println("Type: ?HomalgProject for more information")
     end
-    
-    global HOMALG_INITIALIZED = true
     
 end
 
