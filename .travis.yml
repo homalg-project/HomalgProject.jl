@@ -22,15 +22,6 @@ before_install:
 # - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get update; fi # sudo apt-get install -y libglpk-dev;
 # - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi # brew install glpk;
 
-script:
-  - travis_wait 60 julia --color=yes -e 'using Pkg;
-          Pkg.instantiate();
-          Pkg.test("HomalgProject");'
-
-after_success:
-  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
-#  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Coveralls.submit(process_folder())'
-
 jobs:
   allow_failures:
     - julia: nightly
