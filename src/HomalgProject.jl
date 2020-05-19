@@ -96,7 +96,7 @@ export HomalgMatrix
 
 include("../deps/homalg-project.jl")
 
-global PATH_TO_SINGULAR = dirname(dirname(pathof(Singular)))
+global SINGULAR_PATH = dirname(dirname(pathof(Singular)))
 
 global HOMALG_EXTRA_PATHS = [ lib4ti2_jll.PATH_list ]
 
@@ -114,7 +114,7 @@ function UseExternalSingular( bool::Bool )
     end
     
     ## add ~/.julia/.../Singular/deps/usr/bin/ to GAPInfo.DirectoriesSystemPrograms
-    singular = GAP.julia_to_gap(joinpath(PATH_TO_SINGULAR,"deps","usr","bin"))
+    singular = GAP.julia_to_gap(joinpath(SINGULAR_PATH,"deps","usr","bin"))
     paths = GAP.Globals.Concatenation( GAP.julia_to_gap( [ singular ] ), GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
     paths = GAP.Globals.Unique( paths )
     GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
@@ -129,7 +129,7 @@ function UseExternalSingular( bool::Bool )
     LoadPackage( "RingsForHomalg" )
     
     ## add ~/.julia/.../Singular/deps/usr/lib/ to LD_LIBRARY_PATH and DYLD_LIBRARY_PATH
-    lib = joinpath(PATH_TO_SINGULAR,"deps","usr","lib")
+    lib = joinpath(SINGULAR_PATH,"deps","usr","lib")
     lib = [ "LD_LIBRARY_PATH=" * lib * ":\$LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH=" * lib * ":\$DYLD_LIBRARY_PATH" ]
     GAP.Globals.HOMALG_IO_Singular.environment = GAP.julia_to_gap( [GAP.julia_to_gap(lib[1]), GAP.julia_to_gap(lib[2])] )
     
