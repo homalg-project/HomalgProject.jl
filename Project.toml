@@ -4,6 +4,7 @@ authors = ["Mohamed Barakat <mohamed.barakat@uni-siegen.de>"]
 version = "0.4.0"
 
 [deps]
+BinaryProvider = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
 GAP = "c863536a-3901-11e9-33e7-d5cd0df7b904"
 Singular = "bcd08a7b-43d2-5ff7-b6d4-c458787f915c"
 lib4ti2_jll = "1493ae25-0f90-5c0e-a06c-8c5077d6d66f"

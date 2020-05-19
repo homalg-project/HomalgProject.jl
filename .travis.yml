@@ -19,8 +19,8 @@ env:
 dist: bionic
 
 before_install:
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get update; sudo apt-get install -y libglpk-dev; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; brew install glpk; fi
+# - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get update; fi # sudo apt-get install -y libglpk-dev;
+# - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi # brew install glpk;
 
 script:
   - travis_wait 60 julia --color=yes -e 'using Pkg;

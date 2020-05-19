@@ -74,8 +74,6 @@ import Singular.libSingular: call_interpreter
 
 export call_interpreter
 
-import lib4ti2_jll
-
 import Pkg
 import Markdown
 
@@ -98,7 +96,13 @@ include("../deps/homalg-project.jl")
 
 global SINGULAR_PATH = dirname(dirname(pathof(Singular)))
 
-global HOMALG_EXTRA_PATHS = [ lib4ti2_jll.PATH_list ]
+global HOMALG_PATHS = [ ]
+
+## $(HOMALG_PROJECT_PATH)/deps/usr/bin should be the last entry
+HOMALG_PATHS = vcat( HOMALG_PATHS,
+                           [ [ joinpath(HOMALG_PROJECT_PATH,"deps","usr","bin") ] ] )
+
+export HOMALG_PATHS
 
 ##
 function UseExternalSingular( bool::Bool )
@@ -188,8 +192,8 @@ function __init__()
     ## add "~/.julia/.../HomalgProject/" at the beginning of GAPInfo.RootPaths
     GAP.Globals.EnhanceRootDirectories( GAP.julia_to_gap( [ GAP.julia_to_gap( HOMALG_PROJECT_PATH * "/" ) ] ) )
     
-    ## add ~/.julia/artifacts/*/bin to GAPInfo.DirectoriesSystemPrograms
-    for paths in HOMALG_EXTRA_PATHS
+    ## add more paths to GAPInfo.DirectoriesSystemPrograms
+    for paths in HOMALG_PATHS
         paths = GAP.Globals.List( GAP.julia_to_gap( paths ), GAP.julia_to_gap )
         paths = GAP.Globals.Concatenation( paths, GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
         paths = GAP.Globals.Unique( paths )
