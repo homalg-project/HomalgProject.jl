@@ -65,10 +65,10 @@ greet() = print("The homalg project compatibility package for Julia")
 import Base: getindex
 
 import GAP
-import GAP: LoadPackageAndExposeGlobals, @g_str, @gap, GapObj
+import GAP: LoadPackageAndExposeGlobals, julia_to_gap, @g_str, @gap, GapObj
 
 export GAP
-export LoadPackageAndExposeGlobals, @g_str, @gap, GapObj
+export LoadPackageAndExposeGlobals, julia_to_gap, @g_str, @gap, GapObj
 
 import Singular
 import Singular.libSingular: call_interpreter
@@ -78,8 +78,8 @@ export call_interpreter
 import Pkg
 import Markdown
 
-Base.:*(x::GAP.GapObj,y::String) = x*GAP.julia_to_gap(y)
-Base.getindex(x::GAP.GapObj,y::String) = GAP.Globals.ELM_LIST(x,GAP.julia_to_gap(y))
+Base.:*(x::GAP.GapObj,y::String) = x*julia_to_gap(y)
+Base.getindex(x::GAP.GapObj,y::String) = GAP.Globals.ELM_LIST(x,julia_to_gap(y))
 
 function LoadPackage( pkgname::String )
     LoadPackageAndExposeGlobals( pkgname, Main, all_globals = true )
@@ -88,7 +88,7 @@ end
 export LoadPackage
 
 function HomalgMatrix( M::String, m::Int64, n::Int64, R::GAP.GapObj )
-    return GAP.Globals.HomalgMatrix( GAP.julia_to_gap( M ), m, n, R )
+    return GAP.Globals.HomalgMatrix( julia_to_gap( M ), m, n, R )
 end
 
 export HomalgMatrix
@@ -112,15 +112,15 @@ function UseExternalSingular( bool::Bool )
         ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
         LoadPackage( "RingsForHomalg" )
         ## Read( "LaunchCAS_JSingularInterpreterForHomalg.g" )
-        path = GAP.julia_to_gap(joinpath(HOMALG_PROJECT_PATH,"src","LaunchCAS_JSingularInterpreterForHomalg.g"))
+        path = julia_to_gap(joinpath(HOMALG_PROJECT_PATH,"src","LaunchCAS_JSingularInterpreterForHomalg.g"))
         GAP.Globals.Read(path)
         GAP.Globals.HOMALG_IO_Singular.LaunchCAS = GAP.Globals.LaunchCAS_JSingularInterpreterForHomalg_preload
         return true
     end
     
     ## add ~/.julia/.../Singular/deps/usr/bin/ to GAPInfo.DirectoriesSystemPrograms
-    singular = GAP.julia_to_gap(joinpath(SINGULAR_PATH,"deps","usr","bin"))
-    paths = GAP.Globals.Concatenation( GAP.julia_to_gap( [ singular ] ), GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
+    singular = julia_to_gap(joinpath(SINGULAR_PATH,"deps","usr","bin"))
+    paths = GAP.Globals.Concatenation( julia_to_gap( [ singular ] ), GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
     paths = GAP.Globals.Unique( paths )
     GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
     GAP.Globals.GAPInfo.DirectoriesPrograms = GAP.Globals.List( GAP.Globals.GAPInfo.DirectoriesSystemPrograms, GAP.Globals.Directory )
@@ -136,7 +136,7 @@ function UseExternalSingular( bool::Bool )
     ## add ~/.julia/.../Singular/deps/usr/lib/ to LD_LIBRARY_PATH and DYLD_LIBRARY_PATH
     lib = joinpath(SINGULAR_PATH,"deps","usr","lib")
     lib = [ "LD_LIBRARY_PATH=" * lib * ":\$LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH=" * lib * ":\$DYLD_LIBRARY_PATH" ]
-    GAP.Globals.HOMALG_IO_Singular.environment = GAP.julia_to_gap( [GAP.julia_to_gap(lib[1]), GAP.julia_to_gap(lib[2])] )
+    GAP.Globals.HOMALG_IO_Singular.environment = julia_to_gap( [julia_to_gap(lib[1]), julia_to_gap(lib[2])] )
     
     GAP.Globals.HOMALG_IO_Singular.LaunchCAS = false
     
@@ -184,18 +184,18 @@ function __init__()
     DownloadPackageFromHomalgProject( "OscarForHomalg" )
     
     ## Read( "Tools.g" )
-    path = GAP.julia_to_gap(joinpath( HOMALG_PROJECT_PATH, "src", "Tools.g" ))
+    path = julia_to_gap(joinpath( HOMALG_PROJECT_PATH, "src", "Tools.g" ))
     GAP.Globals.Read(path)
     
     ## add "~/.gap/" at the end of GAPInfo.RootPaths
-    GAP.Globals.ExtendRootDirectories( GAP.julia_to_gap( [ GAP.Globals.UserHomeExpand( GAP.julia_to_gap( "~/.gap/" ) ) ] ) )
+    GAP.Globals.ExtendRootDirectories( julia_to_gap( [ GAP.Globals.UserHomeExpand( julia_to_gap( "~/.gap/" ) ) ] ) )
     
     ## add "~/.julia/.../HomalgProject/" at the beginning of GAPInfo.RootPaths
-    GAP.Globals.EnhanceRootDirectories( GAP.julia_to_gap( [ GAP.julia_to_gap( HOMALG_PROJECT_PATH * "/" ) ] ) )
+    GAP.Globals.EnhanceRootDirectories( julia_to_gap( [ julia_to_gap( HOMALG_PROJECT_PATH * "/" ) ] ) )
     
     ## add more paths to GAPInfo.DirectoriesSystemPrograms
     for paths in HOMALG_PATHS
-        paths = GAP.Globals.List( GAP.julia_to_gap( paths ), GAP.julia_to_gap )
+        paths = GAP.Globals.List( julia_to_gap( paths ), julia_to_gap )
         paths = GAP.Globals.Concatenation( paths, GAP.Globals.GAPInfo.DirectoriesSystemPrograms )
         paths = GAP.Globals.Unique( paths )
         GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths

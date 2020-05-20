@@ -9,7 +9,7 @@ The following examples tests the functionality of the software projects
 ```@meta
 DocTestSetup = quote
     using HomalgProject
-    GAP.Globals.SizeScreen( GAP.julia_to_gap( [ 4096 ] ) )
+    GAP.Globals.SizeScreen( julia_to_gap( [ 4096 ] ) )
     LoadPackage( "GradedModules" )
     LoadPackage( "GradedModulePresentationsForCAP" )
     GAP.Globals.HOMALG_IO.show_banners = false
@@ -336,7 +336,7 @@ An object in The category of graded left f.p. modules over Q[x,y] (with weights 
 julia> IsZero( coker_mod )
 false
 
-julia> is_artinian = GAP.julia_to_gap( M -> AffineDimension( M ) <= 0 );
+julia> is_artinian = julia_to_gap( M -> AffineDimension( M ) <= 0 );
 
 julia> SetNameFunction( is_artinian, g"is_artinian" )
 
