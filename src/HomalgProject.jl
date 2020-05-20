@@ -65,10 +65,10 @@ greet() = print("The homalg project compatibility package for Julia")
 import Base: getindex
 
 import GAP
-import GAP: julia_to_gap, @g_str, @gap, GapObj
+import GAP: julia_to_gap, gap_to_julia, @g_str, @gap, GapObj
 
 export GAP
-export julia_to_gap, @g_str, @gap, GapObj
+export julia_to_gap, gap_to_julia, @g_str, @gap, GapObj
 
 import Singular
 import Singular.libSingular: call_interpreter

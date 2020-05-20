@@ -9,14 +9,14 @@ function CompileGapPackage( name; print_available = true, install_script = false
         pkg = GAP.Globals.PackageInfo( gstr )
         
         if GAP.Globals.Length( pkg ) == 0
-            dirs = GAP.gap_to_julia(GAP.Globals.String( GAP.EvalString("List(DirectoriesLibrary(\"pkg\"), d -> Filename(d, \"\"))")))
+            dirs = gap_to_julia(GAP.Globals.String( GAP.EvalString("List(DirectoriesLibrary(\"pkg\"), d -> Filename(d, \"\"))")))
             @warn "unable to find package named \"" * name * "\" in " * dirs
             return false
         end
         
         pkg = pkg[1]
         
-        path = GAP.gap_to_julia( pkg.InstallationPath )
+        path = gap_to_julia( pkg.InstallationPath )
         
         @info "Compiling \"" * path * "\""
         
@@ -73,7 +73,7 @@ function DownloadPackageFromHomalgProject( pkgname )
     pkgname = GAP.Globals.PKGMAN_Exec(julia_to_gap("."), git, clone, pkgname, julia_to_gap(dir));
     
     if pkgname.code != 0
-        @warn "Cloning failed:\n" * GAP.gap_to_julia(pkgname.output)
+        @warn "Cloning failed:\n" * gap_to_julia(pkgname.output)
         return false
     end
     
@@ -102,11 +102,11 @@ function UpdatePackageFromHomalgProject( pkgname )
     pkgname = GAP.Globals.PKGMAN_Exec(julia_to_gap(dir), git, pull, julia_to_gap("--ff-only"));
     
     if pkgname.code != 0
-        @warn "Updating failed:\n" * GAP.gap_to_julia(pkgname.output)
+        @warn "Updating failed:\n" * gap_to_julia(pkgname.output)
         return false
     end
     
-    @info GAP.gap_to_julia(pkgname.output)
+    @info gap_to_julia(pkgname.output)
     return true
     
 end
@@ -132,7 +132,7 @@ function RemovePackageFromHomalgProject( pkgname )
     pkgname = GAP.Globals.PKGMAN_Exec(julia_to_gap("."), rm, opt, julia_to_gap(dir));
     
     if pkgname.code != 0
-        @warn "Remving failed:\n" * GAP.gap_to_julia(pkgname.output)
+        @warn "Remving failed:\n" * gap_to_julia(pkgname.output)
         return false
     end
     

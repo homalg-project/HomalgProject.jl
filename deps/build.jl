@@ -1,5 +1,5 @@
 import GAP
-import GAP: julia_to_gap
+import GAP: julia_to_gap, gap_to_julia
 
 include( "homalg-project.jl" )
 
