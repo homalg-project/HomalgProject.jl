@@ -2,7 +2,7 @@ global HOMALG_PROJECT_PATH = dirname( @__DIR__ )
 
 function CompileGapPackage( name; print_available = true, install_script = false, test_availability = true )
     
-    gstr = GAP.julia_to_gap( name )
+    gstr = julia_to_gap( name )
     
     if ( test_availability == false ) || ( GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail )
         
@@ -56,11 +56,11 @@ export CompileGapPackage
 ##
 function DownloadPackageFromHomalgProject( pkgname )
     
-    res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
+    res = GAP.Globals.LoadPackage(julia_to_gap("PackageManager"), false)
     @assert res
     dir = HOMALG_PROJECT_PATH * "/pkg/"
-    git = GAP.julia_to_gap("git")
-    clone = GAP.julia_to_gap("clone")
+    git = julia_to_gap("git")
+    clone = julia_to_gap("clone")
     
     dir = dir * pkgname
     
@@ -69,8 +69,8 @@ function DownloadPackageFromHomalgProject( pkgname )
     end
     
     @info "Cloning into \"" * dir * "\""
-    pkgname = GAP.julia_to_gap("https://github.com/homalg-project/" * pkgname)
-    pkgname = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), git, clone, pkgname, GAP.julia_to_gap(dir));
+    pkgname = julia_to_gap("https://github.com/homalg-project/" * pkgname)
+    pkgname = GAP.Globals.PKGMAN_Exec(julia_to_gap("."), git, clone, pkgname, julia_to_gap(dir));
     
     if pkgname.code != 0
         @warn "Cloning failed:\n" * GAP.gap_to_julia(pkgname.output)
@@ -86,11 +86,11 @@ export DownloadPackageFromHomalgProject
 ##
 function UpdatePackageFromHomalgProject( pkgname )
     
-    res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
+    res = GAP.Globals.LoadPackage(julia_to_gap("PackageManager"), false)
     @assert res
     dir = HOMALG_PROJECT_PATH * "/pkg/"
-    git = GAP.julia_to_gap("git")
-    pull = GAP.julia_to_gap("pull")
+    git = julia_to_gap("git")
+    pull = julia_to_gap("pull")
     
     dir = dir * pkgname
     
@@ -99,7 +99,7 @@ function UpdatePackageFromHomalgProject( pkgname )
     end
     
     @info "Updating \"" * dir * "\""
-    pkgname = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap(dir), git, pull, GAP.julia_to_gap("--ff-only"));
+    pkgname = GAP.Globals.PKGMAN_Exec(julia_to_gap(dir), git, pull, julia_to_gap("--ff-only"));
     
     if pkgname.code != 0
         @warn "Updating failed:\n" * GAP.gap_to_julia(pkgname.output)
@@ -116,11 +116,11 @@ export UpdatePackageFromHomalgProject
 ##
 function RemovePackageFromHomalgProject( pkgname )
     
-    res = GAP.Globals.LoadPackage(GAP.julia_to_gap("PackageManager"), false)
+    res = GAP.Globals.LoadPackage(julia_to_gap("PackageManager"), false)
     @assert res
     dir = HOMALG_PROJECT_PATH * "/pkg/"
-    rm = GAP.julia_to_gap("rm")
-    opt = GAP.julia_to_gap("-rf")
+    rm = julia_to_gap("rm")
+    opt = julia_to_gap("-rf")
     
     dir = dir * pkgname
     
@@ -129,7 +129,7 @@ function RemovePackageFromHomalgProject( pkgname )
     end
     
     @info "Removing \"" * dir * "\""
-    pkgname = GAP.Globals.PKGMAN_Exec(GAP.julia_to_gap("."), rm, opt, GAP.julia_to_gap(dir));
+    pkgname = GAP.Globals.PKGMAN_Exec(julia_to_gap("."), rm, opt, julia_to_gap(dir));
     
     if pkgname.code != 0
         @warn "Remving failed:\n" * GAP.gap_to_julia(pkgname.output)
