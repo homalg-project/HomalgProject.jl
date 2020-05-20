@@ -15,12 +15,15 @@ These are open source [GAP](https://www.gap-system.org) multi-package projects f
 
 ## Installation
 
+To install Julia follow the instructions of the first two steps on the [Oscar installation page](https://oscar.computeralgebra.de/install/). Then start Julia and add the package `HomalgProject`:
+
 ```julia
+$ julia
 julia> using Pkg
 julia> Pkg.add("HomalgProject")
 ```
 
-This will clone the repositories listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `DownloadAllPackagesFromHomalgProject( )` and compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE` using `CompileGapPackage( pkgname )`.
+This will also clone the repositories listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `DownloadAllPackagesFromHomalgProject( )` and compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE` using `CompileGapPackage( pkgname )`.
 
 Furthermore:
 
