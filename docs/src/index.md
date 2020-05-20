@@ -19,7 +19,7 @@ julia> using Pkg
 julia> Pkg.add("HomalgProject")
 ```
 
-This will also clone the repositories listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `DownloadAllPackagesFromHomalgProject( )` and compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE` using `CompileGapPackage( pkgname )`.
+This will also clone the repositories listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `DownloadAllPackagesFromHomalgProject( )` and compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE` using `GAP.Packages.install( pkgname )`.
 
 Furthermore:
 
