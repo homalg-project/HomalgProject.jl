@@ -1,6 +1,6 @@
 using HomalgProject, Test, Documenter
 
-DocMeta.setdocmeta!( HomalgProject, :DocTestSetup, :( using HomalgProject ); recursive = true )
+DocMeta.setdocmeta!(HomalgProject, :DocTestSetup, :(using HomalgProject); recursive = true)
 
 include("packages.jl")
 include("singular.jl")

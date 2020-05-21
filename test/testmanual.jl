@@ -1,3 +1,3 @@
 @testset "manual examples" begin
-    doctest( HomalgProject )
+    doctest(HomalgProject)
 end
