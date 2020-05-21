@@ -26,7 +26,7 @@ Furthermore:
 
 * `RemoveAllPackagesFromHomalgProject( )` removes all packages listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `RemovePackageFromHomalgProject( pkgname )`. This might be useful if you encounter problems while updating the packages.
 
-The correctness of the installation and the availability of the functionality can then any time be tested using
+The correctness of the installation and the availability of the functionality can at any time be tested using
 
 ```julia
 julia> using Pkg; Pkg.test("HomalgProject")
