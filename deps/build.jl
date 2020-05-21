@@ -1,12 +1,11 @@
 import GAP
 import GAP: julia_to_gap, gap_to_julia
 
-include( "homalg-project.jl" )
+include("homalg-project.jl")
 
-DownloadAllPackagesFromHomalgProject( )
+DownloadAllPackagesFromHomalgProject()
 
 for pkg in PACKAGES_TO_COMPILE
-    
-    GAP.Packages.install( pkg );
-    
+    GAP.Packages.install(pkg)
+
 end
