@@ -2,7 +2,7 @@
 
 | **Documentation**                                                 | **Build Status**                                                                                |
 |:-----------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------:|
-| [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url] | [![][travis-img]][travis-url] [![][codecov-img]][codecov-url] |
+| [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url] | [![][tests-img]][action-url] [![][tagbot-img]][action-url] [![][compathelper-img]][action-url] [![][codecov-img]][codecov-url] |
 
 ## Introduction
 
@@ -84,11 +84,11 @@ This software is licensed under the LGPL, version 3, or any later version.
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
 [docs-stable-url]: https://homalg-project.github.io/HomalgProject.jl/stable/
 
-[travis-img]: https://travis-ci.com/homalg-project/HomalgProject.jl.svg?branch=master
-[travis-url]: https://travis-ci.com/homalg-project/HomalgProject.jl
+[tests-img]: https://github.com/homalg-project/HomalgProject.jl/workflows/Tests/badge.svg
+[tagbot-img]: https://github.com/homalg-project/HomalgProject.jl/workflows/TagBot/badge.svg
+[compathelper-img]: https://github.com/homalg-project/HomalgProject.jl/workflows/CompatHelper/badge.svg
 
-[appveyor-img]: https://ci.appveyor.com/api/projects/status/github/homalg-project/HomalgProject.jl?svg=true
-[appveyor-url]: https://ci.appveyor.com/project/homalg-project/HomalgProject-jl
+[action-url]: https://github.com/homalg-project/HomalgProject.jl/actions
 
 [codecov-img]: https://codecov.io/gh/homalg-project/HomalgProject.jl/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/homalg-project/HomalgProject.jl
