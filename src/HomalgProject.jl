@@ -125,7 +125,7 @@ function UseExternalSingular( bool::Bool )
     GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
     GAP.Globals.GAPInfo.DirectoriesPrograms = GAP.Globals.List( GAP.Globals.GAPInfo.DirectoriesSystemPrograms, GAP.Globals.Directory )
     
-    CompileGapPackage( "io", print_available = false )
+    GAP.Packages.install( "io" )
     
     ## loading IO_ForHomalg now suppresses its banner later
     LoadPackage( "IO_ForHomalg" )
