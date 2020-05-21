@@ -65,10 +65,10 @@ greet() = print("The homalg project compatibility package for Julia")
 import Base: getindex
 
 import GAP
-import GAP: LoadPackageAndExposeGlobals, julia_to_gap, @g_str, @gap, GapObj
+import GAP: julia_to_gap, gap_to_julia, @g_str, @gap, GapObj
 
 export GAP
-export LoadPackageAndExposeGlobals, julia_to_gap, @g_str, @gap, GapObj
+export julia_to_gap, gap_to_julia, @g_str, @gap, GapObj
 
 import Singular
 import Singular.libSingular: call_interpreter
@@ -82,7 +82,7 @@ Base.:*(x::GAP.GapObj,y::String) = x*julia_to_gap(y)
 Base.getindex(x::GAP.GapObj,y::String) = GAP.Globals.ELM_LIST(x,julia_to_gap(y))
 
 function LoadPackage( pkgname::String )
-    LoadPackageAndExposeGlobals( pkgname, Main, all_globals = true )
+    GAP.LoadPackageAndExposeGlobals( pkgname, Main, all_globals = true )
 end
 
 export LoadPackage
