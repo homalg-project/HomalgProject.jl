@@ -134,7 +134,7 @@ function UseExternalSingular(bool::Bool)
         GAP.Globals.Directory,
     )
 
-    if !GAP.Globals.TestPackageAvailability(julia_to_gap("io"))
+    if GAP.Globals.TestPackageAvailability(julia_to_gap("io")) == GAP.Globals.fail
         GAP.Packages.install("io")
     end
 
