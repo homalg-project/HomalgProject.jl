@@ -1,58 +1,5 @@
 global HOMALG_PROJECT_PATH = dirname( @__DIR__ )
 
-function CompileGapPackage( name; print_available = true, install_script = false, test_availability = true )
-    
-    gstr = julia_to_gap( name )
-    
-    if ( test_availability == false ) || ( GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail )
-        
-        pkg = GAP.Globals.PackageInfo( gstr )
-        
-        if GAP.Globals.Length( pkg ) == 0
-            dirs = GAP.gap_to_julia(GAP.Globals.String( GAP.EvalString("List(DirectoriesLibrary(\"pkg\"), d -> Filename(d, \"\"))")))
-            @warn "unable to find package named \"" * name * "\" in " * dirs
-            return false
-        end
-        
-        pkg = pkg[1]
-        
-        path = GAP.gap_to_julia( pkg.InstallationPath )
-        
-        @info "Compiling \"" * path * "\""
-        
-        cd(path)
-        
-        if install_script == false
-            if name in PACKAGES_WITH_OLD_CONFIGURE
-                run(`./configure $(GAP.GAPROOT)`)
-            else
-                run(`./configure --with-gaproot=$(GAP.GAPROOT)`)
-            end
-            run(`make -k -j$(Sys.CPU_THREADS)`) ## -k = Keep going when some targets can't be made.
-        else
-            run(`$(install_script) $(GAP.GAPROOT)`)
-        end
-        
-        if GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail
-            @warn "Compiling the package \"" * name * "\" failed."
-            return false
-        end
-        
-        @info "Compiling the package \"" * name * "\" was successful."
-        return true
-        
-    end
-    
-    if print_available == true
-        @info "Package \"" * name * "\" is already installed."
-    end
-    
-    return true
-    
-end
-
-export CompileGapPackage
-
 ##
 function DownloadPackageFromHomalgProject( pkgname )
     
@@ -194,29 +141,6 @@ global PACKAGES_BASED_ON_CAP =
       "ZariskiFrames",
       ]
 
-global PACKAGES_TO_COMPILE =
-    [ #"Gauss", ## compile with test_availability = false
-      #"Browse", ## do not compile browse as it results into GAP raising the error "Error opening terminal: xterm-256color."
-      "io",
-      #"grape", ## compile with test_availability = false
-      "digraphs",
-      "ferret",
-      "json",
-      "orb",
-      ]
-
-global PACKAGES_WITH_OLD_CONFIGURE  =
-    [ "Browse",
-      "Gauss",
-      "grape",
-      "orb",
-      ]
-    
-global PACKAGES_DOWNLOADING_EXTERNAL_CODE =
-    [ "CddInterface",
-      "NormalizInterface",
-      ]
-
 global PACKAGES_TO_DOWNLOAD =
     vcat( PACKAGES_BASED_ON_HOMALG,
           PACKAGES_BASED_ON_CAP,
@@ -251,3 +175,19 @@ function RemoveAllPackagesFromHomalgProject( )
 end
 
 export RemoveAllPackagesFromHomalgProject
+
+global PACKAGES_TO_COMPILE =
+    [ "Gauss",
+      #"Browse", ## do not compile browse as it results into GAP raising the error "Error opening terminal: xterm-256color."
+      "io",
+      "grape",
+      "digraphs",
+      "ferret",
+      "json",
+      "orb",
+      ]
+
+global PACKAGES_DOWNLOADING_EXTERNAL_CODE =
+    [ "CddInterface",
+      "NormalizInterface",
+      ]
