@@ -1,8 +1,8 @@
 # HomalgProject.jl
 
-| **Documentation**                                                 | **Build Status**                                                                                |
-|:-----------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------:|
-| [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url] | [![][tests-img]][action-url] [![][tagbot-img]][action-url] [![][compathelper-img]][action-url] [![][codecov-img]][codecov-url] |
+| **Documentation** | **Build Status** | **GibHub Actions** |
+|:-----------------:|:----------------:|:------------------:|
+| [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url] | [![][tests-img]][action-url] [![][codecov-img]][codecov-url] | [![][tagbot-img]][action-url] [![][compathelper-img]][action-url] |
 
 ## Introduction
 
