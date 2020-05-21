@@ -124,8 +124,10 @@ function UseExternalSingular( bool::Bool )
     paths = GAP.Globals.Unique( paths )
     GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
     GAP.Globals.GAPInfo.DirectoriesPrograms = GAP.Globals.List( GAP.Globals.GAPInfo.DirectoriesSystemPrograms, GAP.Globals.Directory )
-    
-    GAP.Packages.install( "io" )
+
+    if ! GAP.Globals.TestPackageAvailability( julia_to_gap( "io" ) )
+        GAP.Packages.install( "io" )
+    end
     
     ## loading IO_ForHomalg now suppresses its banner later
     LoadPackage( "IO_ForHomalg" )
