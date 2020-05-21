@@ -26,7 +26,7 @@ jobs:
           version: '1.3'
       
       - name: Install dependencies
-      - run: |
+        run: |
           julia --color=yes --project=docs/ -e '
             using Pkg;
             Pkg.instantiate();
