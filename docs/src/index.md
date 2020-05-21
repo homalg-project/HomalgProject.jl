@@ -15,8 +15,7 @@ To install Julia follow the instructions of the first two steps on the [Oscar in
 
 ```julia
 $ julia
-julia> using Pkg
-julia> Pkg.add("HomalgProject")
+julia> using Pkg; Pkg.add("HomalgProject")
 ```
 
 This will also clone the repositories listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `DownloadAllPackagesFromHomalgProject( )` and compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE` using `GAP.Packages.install( pkgname )`.
@@ -27,14 +26,19 @@ Furthermore:
 
 * `RemoveAllPackagesFromHomalgProject( )` removes all packages listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `RemovePackageFromHomalgProject( pkgname )`. This might be useful if you encounter problems while updating the packages.
 
+The correctness of the installation and the availability of the functionality can then any time be tested using
+
+```julia
+julia> using Pkg; Pkg.test("HomalgProject")
+```
+
 After each update of the Julia package `GAP` a rebuild is (probably) necessary:
 
 ```julia
-julia> using Pkg
-julia> Pkg.build("HomalgProject")
+julia> using Pkg; Pkg.build("HomalgProject")
 ```
 
-This will (re)compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE`.
+This will eventually (re)compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE`.
 
 ## Software dependency
 
