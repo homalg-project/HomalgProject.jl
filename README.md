@@ -1,8 +1,8 @@
 # HomalgProject.jl
 
-| **Documentation** | **Build Status** | **GibHub Actions** |
+| **Documentation** | **Build Status** | **GitHub Actions** |
 |:-----------------:|:----------------:|:------------------:|
-| [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url] | [![][tests-img]][action-url] [![][codecov-img]][codecov-url] | [![][tagbot-img]][action-url] [![][compathelper-img]][action-url] |
+| [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url] | [![][tests-img]][action-url] [![][codecov-img]][codecov-url] | [![][tagbot-img]][action-url] [![][docsbuilder-img]][action-url] [![][compathelper-img]][action-url] |
 
 ## Introduction
 
@@ -90,6 +90,7 @@ This software is licensed under the LGPL, version 3, or any later version.
 
 [tests-img]: https://github.com/homalg-project/HomalgProject.jl/workflows/Tests/badge.svg
 [tagbot-img]: https://github.com/homalg-project/HomalgProject.jl/workflows/TagBot/badge.svg
+[docsbuilder-img]: https://github.com/homalg-project/HomalgProject.jl/workflows/DocsBuilder/badge.svg
 [compathelper-img]: https://github.com/homalg-project/HomalgProject.jl/workflows/CompatHelper/badge.svg
 
 [action-url]: https://github.com/homalg-project/HomalgProject.jl/actions
