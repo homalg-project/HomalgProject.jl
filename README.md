@@ -22,13 +22,7 @@ $ julia
 julia> using Pkg; Pkg.add("HomalgProject")
 ```
 
-This will also clone the repositories listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `DownloadAllPackagesFromHomalgProject( )` and compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE` using `GAP.Packages.install( pkgname )`.
-
-Furthermore:
-
-* `UpdateAllPackagesFromHomalgProject( )` updates all packages listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `UpdatePackageFromHomalgProject( pkgname )`.
-
-* `RemoveAllPackagesFromHomalgProject( )` removes all packages listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `RemovePackageFromHomalgProject( pkgname )`. This might be useful if you encounter problems while updating the packages.
+For more information on the included packages see the [documentation](https://homalg-project.github.io/HomalgProject.jl/dev/#Installation-1).
 
 The correctness of the installation and the availability of the functionality can at any time be tested using
 
@@ -41,8 +35,6 @@ After each update of the Julia package `GAP` a rebuild is (probably) necessary:
 ```julia
 julia> using Pkg; Pkg.build("HomalgProject")
 ```
-
-This will eventually (re)compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE`.
 
 ## Software dependency
 
