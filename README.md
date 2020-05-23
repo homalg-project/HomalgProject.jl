@@ -2,7 +2,7 @@
 
 | **Documentation** | **Build Status** | **GitHub Actions** |
 |:-----------------:|:----------------:|:------------------:|
-| [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url] | [![][tests-img]][action-url] [![][codecov-img]][codecov-url] | [![][tagbot-img]][action-url] [![][docsbuilder-img]][action-url] [![][compathelper-img]][action-url] |
+| [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url] | [![][tests-img]][tests-url] [![][codecov-img]][codecov-url] | [![][tagbot-img]][tagbot-url] [![][docsbuilder-img]][docsbuilder-url] [![][compathelper-img]][compathelper-url] |
 
 ## Introduction
 
@@ -86,6 +86,10 @@ This software is licensed under the LGPL, version 3, or any later version.
 [compathelper-img]: https://github.com/homalg-project/HomalgProject.jl/workflows/CompatHelper/badge.svg
 
 [action-url]: https://github.com/homalg-project/HomalgProject.jl/actions
+[tests-url]: https://github.com/homalg-project/HomalgProject.jl/actions?query=workflow%3ATests
+[tagbot-url]: https://github.com/homalg-project/HomalgProject.jl/actions?query=workflow%3ATagBot
+[docsbuilder-url]: https://github.com/homalg-project/HomalgProject.jl/actions?query=workflow%3ADocsBuilder
+[compathelper-url]: https://github.com/homalg-project/HomalgProject.jl/actions?query=workflow%3ACompatHelper
 
 [codecov-img]: https://codecov.io/gh/homalg-project/HomalgProject.jl/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/homalg-project/HomalgProject.jl
