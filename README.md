@@ -22,7 +22,7 @@ $ julia
 julia> using Pkg; Pkg.add("HomalgProject")
 ```
 
-For more information on the included packages see the [documentation](https://homalg-project.github.io/HomalgProject.jl/dev/#Installation-1).
+For more information on the included [GAP](https://www.gap-system.org) packages see the [documentation](https://homalg-project.github.io/HomalgProject.jl/dev/#Installation-1).
 
 The correctness of the installation and the availability of the functionality can at any time be tested using
 
