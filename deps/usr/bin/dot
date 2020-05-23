@@ -1,6 +1,6 @@
 #!/bin/sh
 # dot
-julia -e 'import Graphviz_jll
+julia --startup-file=no -O0 -e 'import Graphviz_jll
 lib4ti2_jll.dot() do x
  p=run(ignorestatus(`$x $ARGS`))
  exit(p.exitcode)
