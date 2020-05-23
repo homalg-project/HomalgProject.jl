@@ -114,8 +114,8 @@ global PACKAGES_BASED_ON_HOMALG = [
 global PACKAGES_BASED_ON_CAP = [
     "CAP_project",
     ##
+    "Algebroids",
     "BBGG",
-    "Bialgebroids",
     "Bicomplexes",
     "CategoryConstructor",
     "CategoriesWithAmbientObjects",
