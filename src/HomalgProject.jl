@@ -93,6 +93,12 @@ end
 
 export HomalgMatrix
 
+function SizeScreen(L::Array)
+    return GAP.Globals.SizeScreen(julia_to_gap(L))
+end
+
+export SizeScreen
+
 include(joinpath("..","deps","homalg-project.jl"))
 
 global SINGULAR_PATH = dirname(dirname(pathof(Singular)))
