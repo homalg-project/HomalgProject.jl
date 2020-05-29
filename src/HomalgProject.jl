@@ -92,7 +92,7 @@ end
 
 export HomalgMatrix
 
-include("../deps/homalg-project.jl")
+include(joinpath("..","deps","homalg-project.jl"))
 
 global SINGULAR_PATH = dirname(dirname(pathof(Singular)))
 
