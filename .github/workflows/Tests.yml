@@ -36,6 +36,14 @@ jobs:
         with:
           version: ${{ matrix.julia-version }}
       
+      - name: Install Singular for Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update; sudo apt-get install -y singular
+      
+      - name: Install Singular for MacOS
+        if: matrix.os == 'macOS-latest'
+        run: brew update; brew install singular
+      
       - name: "Build package"
         uses: julia-actions/julia-buildpkg@latest
       

@@ -13,15 +13,8 @@ geometry.
 
 ## Software dependency
 
-`HomalgProject` relies on the
-
-| computer algebra systems | through the Julia packages |
-|:------------------------:|:--------------------------:|
-| GAP                      | Gap.jl                     |
-| Nemo                     | Nemo = Nemo.jl             |
-| Singular                 | Singular.jl                |
-
-all of which are components of the computer algebra system
+`HomalgProject` relies on the computer algebra system `GAP`
+via `GAP.jl`, the latter being a component of
 [OSCAR](https://oscar.computeralgebra.de/).
 
 Some of the bundled packages use the GAP packages
@@ -68,11 +61,6 @@ import GAP: julia_to_gap, gap_to_julia, @g_str, @gap, GapObj
 export GAP
 export julia_to_gap, gap_to_julia, @g_str, @gap, GapObj
 
-import Singular
-import Singular.libSingular: call_interpreter
-
-export call_interpreter
-
 import Pkg
 import Markdown
 
@@ -100,8 +88,6 @@ export SizeScreen
 
 include(joinpath("..","deps","homalg-project.jl"))
 
-global SINGULAR_PATH = dirname(dirname(pathof(Singular)))
-
 global HOMALG_PATHS = []
 
 ## $(HOMALG_PROJECT_PATH)/deps/usr/bin should be the last entry
@@ -110,35 +96,7 @@ HOMALG_PATHS = vcat(HOMALG_PATHS, [[joinpath(HOMALG_PROJECT_PATH, "deps", "usr",
 export HOMALG_PATHS
 
 ##
-function UseExternalSingular(bool::Bool)
-
-    if bool == false
-        ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
-        LoadPackage("RingsForHomalg")
-        ## Read( "LaunchCAS_JSingularInterpreterForHomalg.g" )
-        path = julia_to_gap(joinpath(
-            HOMALG_PROJECT_PATH,
-            "src",
-            "LaunchCAS_JSingularInterpreterForHomalg.g",
-        ))
-        GAP.Globals.Read(path)
-        GAP.Globals.HOMALG_IO_Singular.LaunchCAS =
-            GAP.Globals.LaunchCAS_JSingularInterpreterForHomalg_preload
-        return true
-    end
-
-    ## add ~/.julia/.../Singular/deps/usr/bin/ to GAPInfo.DirectoriesSystemPrograms
-    singular = julia_to_gap(joinpath(SINGULAR_PATH, "deps", "usr", "bin"))
-    paths = GAP.Globals.Concatenation(
-        julia_to_gap([singular]),
-        GAP.Globals.GAPInfo.DirectoriesSystemPrograms,
-    )
-    paths = GAP.Globals.Unique(paths)
-    GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
-    GAP.Globals.GAPInfo.DirectoriesPrograms = GAP.Globals.List(
-        GAP.Globals.GAPInfo.DirectoriesSystemPrograms,
-        GAP.Globals.Directory,
-    )
+function LoadPackageIO()
 
     if GAP.Globals.TestPackageAvailability(julia_to_gap("io")) == GAP.Globals.fail
         GAP.Packages.install("io")
@@ -147,25 +105,11 @@ function UseExternalSingular(bool::Bool)
     ## loading IO_ForHomalg now suppresses its banner later
     LoadPackage("IO_ForHomalg")
 
-    ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
-    LoadPackage("RingsForHomalg")
-
-    ## add ~/.julia/.../Singular/deps/usr/lib/ to LD_LIBRARY_PATH and DYLD_LIBRARY_PATH
-    lib = joinpath(SINGULAR_PATH, "deps", "usr", "lib")
-    lib = [
-        "LD_LIBRARY_PATH=" * lib * ":\$LD_LIBRARY_PATH",
-        "DYLD_LIBRARY_PATH=" * lib * ":\$DYLD_LIBRARY_PATH",
-    ]
-    GAP.Globals.HOMALG_IO_Singular.environment =
-        julia_to_gap([julia_to_gap(lib[1]), julia_to_gap(lib[2])])
-
-    GAP.Globals.HOMALG_IO_Singular.LaunchCAS = false
+    GAP.Globals.HOMALG_IO.show_banners = false
 
     return true
 
 end
-
-export UseExternalSingular
 
 """
     HomalgProject.version
@@ -206,7 +150,6 @@ function __init__()
 
     DownloadPackageFromHomalgProject("homalg_project")
     DownloadPackageFromHomalgProject("CAP_project")
-    DownloadPackageFromHomalgProject("OscarForHomalg")
 
     ## Read( "Tools.g" )
     path = julia_to_gap(joinpath(HOMALG_PROJECT_PATH, "src", "Tools.g"))
@@ -233,20 +176,19 @@ function __init__()
         )
     end
 
-    UseExternalSingular(true)
-    UseExternalSingular(false)
+    LoadPackageIO()
 
     if haskey(ENV, "HOMALG_PROJECT_SHOW_BANNER")
         show_banner = ENV["HOMALG_PROJECT_SHOW_BANNER"] == "true"
     else
         show_banner =
-            isinteractive() && !any(x -> x.name in ["Oscar"], keys(Base.package_locks))
+            isinteractive() && !any(x -> x.name in ["Oscar", "CapAndHomalgWithOscar"], keys(Base.package_locks))
     end
 
     if show_banner
         print("HomalgProject v")
         printstyled("$version\n", color = :green)
-        println("Imported OSCAR's components GAP, Nemo, and Singular")
+        println("Imported OSCAR's component GAP")
         println("Type: ?HomalgProject for more information")
     end
 

@@ -53,15 +53,9 @@ PACKAGES_TO_COMPILE
 
 ## Software dependency
 
-`HomalgProject` relies on the
-
-| computer algebra systems                    | through the Julia packages                                 |
-|:-------------------------------------------:|:----------------------------------------------------------:|
-| [GAP](https://www.gap-system.org/)          | [Gap.jl](https://github.com/oscar-system/GAP.jl)           |
-| [Nemo](http://www.nemocas.org/)             | Nemo = [Nemo.jl](https://github.com/wbhart/Nemo.jl)        |
-| [Singular](https://www.singular.uni-kl.de/) | [Singular.jl](https://github.com/oscar-system/Singular.jl) |
-
-all of which are components of the computer algebra system [OSCAR](https://oscar.computeralgebra.de/).
+`HomalgProject` relies on the computer algebra system [GAP](https://www.gap-system.org/)
+via [Gap.jl](https://github.com/oscar-system/GAP.jl), the latter being a component of
+[OSCAR](https://oscar.computeralgebra.de/).
 
 Some of the bundled packages use the [GAP](https://www.gap-system.org) packages
 
