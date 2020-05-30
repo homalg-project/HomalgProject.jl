@@ -1,7 +1,7 @@
 name = "HomalgProject"
 uuid = "50bd374c-87b5-11e9-015a-2febe71398bd"
 authors = ["Mohamed Barakat <mohamed.barakat@uni-siegen.de>"]
-version = "0.4.7"
+version = "0.4.8"
 
 [deps]
 BinaryProvider = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
