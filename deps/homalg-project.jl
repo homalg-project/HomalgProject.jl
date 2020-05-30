@@ -120,6 +120,7 @@ global PACKAGES_BASED_ON_CAP = [
     "CategoryConstructor",
     "CategoriesWithAmbientObjects",
     "CatReps",
+    "CddInterface",
     "ComplexesCategories",
     "DerivedCategories",
     "FinSetsForCAP",
@@ -175,6 +176,8 @@ end
 
 export RemoveAllPackagesFromHomalgProject
 
+
+
 global PACKAGES_TO_COMPILE = [
     "Gauss",
     #"Browse", ## do not compile browse as it results into GAP raising the error "Error opening terminal: xterm-256color."
@@ -186,4 +189,52 @@ global PACKAGES_TO_COMPILE = [
     "orb",
 ]
 
-global PACKAGES_DOWNLOADING_EXTERNAL_CODE = ["CddInterface", "NormalizInterface"]
+import cddlib_jll
+
+function CompileCddInterface(; print_available = true, test_availability = true)
+    
+    name = "CddInterface"
+    
+    gstr = julia_to_gap( name )
+    
+    if ( test_availability == false ) || ( GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail )
+        pkg = GAP.Globals.PackageInfo( gstr )
+        
+        if GAP.Globals.Length( pkg ) == 0
+            dirs = gap_to_julia(GAP.Globals.String( GAP.EvalString("List(DirectoriesLibrary(\"pkg\"), d -> Filename(d, \"\"))")))
+            @warn "unable to find package named \"" * name * "\" in " * dirs
+            return false
+        end
+        
+        pkg = pkg[1]
+        
+        path = gap_to_julia( pkg.InstallationPath )
+        
+        @info "Compiling \"" * path * "\""
+        
+        cd(path)
+        
+        run(`./autogen.sh`)
+        run(`./configure --with-gaproot=$(GAP.GAPROOT) --with-cddlib=$(cddlib_jll.artifact_dir)`)
+        
+        run(`make -k -j$(Sys.CPU_THREADS)`) ## -k = Keep going when some targets can't be made.
+        
+        if GAP.Globals.TestPackageAvailability( gstr ) == GAP.Globals.fail
+            @warn "Compiling the package \"" * name * "\" failed."
+            return false
+        end
+        
+        @info "Compiling the package \"" * name * "\" was successful."
+        return true
+        
+    end
+    
+    if print_available == true
+        @info "Package \"" * name * "\" is already installed."
+    end
+    
+    return true
+    
+end
+
+export CompileCddInterface

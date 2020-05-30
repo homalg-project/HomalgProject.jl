@@ -5,6 +5,7 @@ DocMeta.setdocmeta!(HomalgProject, :DocTestSetup, :(using HomalgProject); recurs
 include("packages.jl")
 include("singular.jl")
 include("4ti2.jl")
+include("cddlib.jl")
 include("digraphs.jl")
 include("homalg_project.jl")
 include("testmanual.jl")
