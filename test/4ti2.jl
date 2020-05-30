@@ -7,7 +7,7 @@
         julia_to_gap([[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5]]),
         julia_to_gap,
     )
-    @test basis == lib4ti2_prepare_gap_input(basis)
+    @test basis == ConvertJuliaToGAP(basis)
     groebner = lib4ti2_groebner_matrix(basis)
     GAP.Globals.Sort(groebner)
     @test GAP.Globals.Length(groebner) == 10
