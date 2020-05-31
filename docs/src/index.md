@@ -1,5 +1,8 @@
 # HomalgProject.jl
 
+```@meta
+CurrentModule = HomalgProject
+```
 ## Introduction
 
 The [Julia](https://julialang.org/) package `HomalgProject` provides simplified access to the repositories of the [GAP](https://www.gap-system.org) packages hosted at the GitHub organization [homalg-project](https://github.com/homalg-project), most of which are based on the
@@ -18,13 +21,7 @@ $ julia
 julia> using Pkg; Pkg.add("HomalgProject")
 ```
 
-This will also clone the repositories listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `DownloadAllPackagesFromHomalgProject( )` and compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE` using `GAP.Packages.install( pkgname )`.
-
-Furthermore:
-
-* `UpdateAllPackagesFromHomalgProject( )` updates all packages listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `UpdatePackageFromHomalgProject( pkgname )`.
-
-* `RemoveAllPackagesFromHomalgProject( )` removes all packages listed in `HomalgProject.PACKAGES_TO_DOWNLOAD` using `RemovePackageFromHomalgProject( pkgname )`. This might be useful if you encounter problems while updating the packages.
+## Testing
 
 The correctness of the installation and the availability of the functionality can at any time be tested using
 
@@ -32,13 +29,27 @@ The correctness of the installation and the availability of the functionality ca
 julia> using Pkg; Pkg.test("HomalgProject")
 ```
 
-After each update of the Julia package `GAP` a rebuild is (probably) necessary:
+## Updating
 
 ```julia
-julia> using Pkg; Pkg.build("HomalgProject")
+julia> using Pkg; Pkg.update("HomalgProject")
+julia> Pkg.build("HomalgProject")
 ```
 
-This will eventually (re)compile the packages listed in `HomalgProject.PACKAGES_TO_COMPILE`.
+This will also clone the repositories listed in [`HomalgProject.PACKAGES_TO_DOWNLOAD`](@ref) using [`DownloadAllPackagesFromHomalgProject`](@ref) and compile the packages listed in [`HomalgProject.PACKAGES_TO_COMPILE`](@ref) using `GAP.Packages.install`(`pkgname`).
+
+```@docs
+version
+PKG_DIR
+PACKAGES_TO_DOWNLOAD
+DownloadAllPackagesFromHomalgProject
+UpdateAllPackagesFromHomalgProject
+RemoveAllPackagesFromHomalgProject
+DownloadPackageFromHomalgProject
+UpdatePackageFromHomalgProject
+RemovePackageFromHomalgProject
+PACKAGES_TO_COMPILE
+```
 
 ## Software dependency
 
@@ -52,7 +63,7 @@ This will eventually (re)compile the packages listed in `HomalgProject.PACKAGES_
 
 all of which are components of the computer algebra system [OSCAR](https://oscar.computeralgebra.de/).
 
-Some of the bundled packages use the GAP packages
+Some of the bundled packages use the [GAP](https://www.gap-system.org) packages
 
 * [IO](https://github.com/gap-packages/io/)
 * [ferret](https://github.com/gap-packages/ferret/)
@@ -72,11 +83,13 @@ and the
 
 The software comes with absolutely no warranty and will most likely have errors. If you use it for computations, please check the correctness of the result very carefully.
 
-This software is licensed under the LGPL, version 3, or any later version.
+This software is licensed under the [LGPL, version 3](https://www.gnu.org/licenses/lgpl-3.0.en.html), or any later version.
 
 ## Funding
 
 *The development of both software projects was partially funded by the [DFG (German Research Foundation)](https://www.dfg.de/) through the [Special Priority Project SPP 1489](https://spp.computeralgebra.de/) and the [Transregional Collaborative Research Centre SFB-TRR 195](https://www.computeralgebra.de/sfb/).*
+
+## Index
 
 ```@index
 ```
