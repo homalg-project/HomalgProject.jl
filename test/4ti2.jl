@@ -3,10 +3,7 @@
     cone = [[5, -1], [0, 1]]
     basis = lib4ti2_hilbert_inequalities(cone)
     GAP.Globals.Sort(basis)
-    @test basis == GAP.Globals.List(
-        julia_to_gap([[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5]]),
-        julia_to_gap,
-    )
+    @test basis == ConvertJuliaToGAP([[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5]])
     @test basis == ConvertJuliaToGAP(basis)
     groebner = lib4ti2_groebner_matrix(basis)
     GAP.Globals.Sort(groebner)
