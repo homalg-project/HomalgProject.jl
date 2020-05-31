@@ -48,16 +48,15 @@ This software is licensed under the LGPL, version 3, or any later version.
 
 ## Funding
 
-*The development of both software projects was partially funded by the
-DFG (German Research Foundation) through the [Special Priority Project
-SPP 1489](https://spp.computeralgebra.de/) and the [Transregional
-Collaborative Research Centre SFB-TRR
-195](https://www.computeralgebra.de/sfb/).*
+The development of both software projects was partially funded by the DFG (German Research Foundation) through
+the [Special Priority Project SPP 1489](https://spp.computeralgebra.de/) and
+the [Transregional Collaborative Research Centre SFB-TRR 195](https://www.computeralgebra.de/sfb/).
 
 More information and the online documentation can be found at the source code repository
 
 https://github.com/homalg-project/HomalgProject.jl
-""" module HomalgProject
+"""
+module HomalgProject
 
 greet() = print("The homalg project compatibility package for Julia")
 
@@ -168,17 +167,25 @@ end
 
 export UseExternalSingular
 
+"""
+    HomalgProject.version
+
+The version number of the loaded `HomalgProject`.
+Please mention this number in any bug report.
+"""
+global version = 0
+
 if VERSION >= v"1.4"
     deps = Pkg.dependencies()
     if Base.haskey(deps, Base.UUID("50bd374c-87b5-11e9-015a-2febe71398bd"))
         ver = Pkg.dependencies()[Base.UUID("50bd374c-87b5-11e9-015a-2febe71398bd")]
         if occursin("/dev/", ver.source)
-            global VERSION_NUMBER = VersionNumber("$(ver.version)-dev")
+            version = VersionNumber("$(ver.version)-dev")
         else
-            global VERSION_NUMBER = VersionNumber("$(ver.version)")
+            version = VersionNumber("$(ver.version)")
         end
     else
-        global VERSION_NUMBER = "not installed"
+        version = "not installed"
     end
 else
     deps = Pkg.API.__installed(Pkg.PKGMODE_MANIFEST) #to also get installed dependencies
@@ -186,18 +193,14 @@ else
         ver = deps["HomalgProject"]
         dir = dirname(@__DIR__)
         if occursin("/dev/", dir)
-            global VERSION_NUMBER = VersionNumber("$(ver)-dev")
+            version = VersionNumber("$(ver)-dev")
         else
-            global VERSION_NUMBER = VersionNumber("$(ver)")
+            version = VersionNumber("$(ver)")
         end
     else
-        global VERSION_NUMBER = "not installed"
+        version = "not installed"
     end
 end
-
-global HOMALG_VERSION_NUMBER = VERSION_NUMBER
-
-export HOMALG_VERSION_NUMBER
 
 function __init__()
 
@@ -242,7 +245,7 @@ function __init__()
 
     if show_banner
         print("HomalgProject v")
-        printstyled("$VERSION_NUMBER\n", color = :green)
+        printstyled("$version\n", color = :green)
         println("Imported OSCAR's components GAP, Nemo, and Singular")
         println("Type: ?HomalgProject for more information")
     end
