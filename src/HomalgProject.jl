@@ -147,6 +147,8 @@ function UseExternalSingular(bool::Bool)
     ## loading IO_ForHomalg now suppresses its banner later
     LoadPackage("IO_ForHomalg")
 
+    SizeScreen( [ 2^12 ] )
+
     ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
     LoadPackage("RingsForHomalg")
 
