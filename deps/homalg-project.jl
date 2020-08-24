@@ -145,31 +145,22 @@ global PACKAGES_BASED_ON_CAP = [
     "CAP_project",
     ##
     "Algebroids",
-    "BBGG",
-    "Bicomplexes",
     "CategoryConstructor",
     "CategoriesWithAmbientObjects",
     "CatReps",
-    "ComplexesCategories",
-    "DerivedCategories",
     "FinSetsForCAP",
     "FinGSetsForCAP",
-    "FrobeniusCategories",
     "FunctorCategories",
     "GradedCategories",
-    "HomotopyCategories",
+    "HigherHomologicalAlgebra",
     "IntrinsicCategories",
     "IntrinsicModules",
     "InternalModules",
     "LazyCategories",
     "Locales",
-    "ModelCategories",
     "QPA2",
-    "QuotientCategories",
-    "StableCategories",
     "SubcategoriesForCAP",
     "Toposes",
-    "TriangulatedCategories",
     "ZariskiFrames",
 ]
 
@@ -188,6 +179,24 @@ List of packages which will be considered by
 * [`RemoveAllPackagesFromHomalgProject`](@ref)()
 """
 global PACKAGES_TO_DOWNLOAD = vcat(PACKAGES_BASED_ON_HOMALG, PACKAGES_BASED_ON_CAP, PACKAGES_NEEDED)
+
+"""
+    HomalgProject.PACKAGES_DEPRECATED
+
+List of packages deprecated packages.
+"""
+global PACKAGES_DEPRECATED = [
+    "BBGG",
+    "Bicomplexes",
+    "ComplexesCategories",
+    "DerivedCategories",
+    "FrobeniusCategories",
+    "HomotopyCategories",
+    "ModelCategories",
+    "QuotientCategories",
+    "StableCategories",
+    "TriangulatedCategories",
+]
 
 """
     DownloadAllPackagesFromHomalgProject()
@@ -236,6 +245,22 @@ function RemoveAllPackagesFromHomalgProject()
 end
 
 export RemoveAllPackagesFromHomalgProject
+
+"""
+    RemoveDeprecatedPackagesFromHomalgProject()
+
+Apply [`RemovePackageFromHomalgProject`](@ref) to all packages listed
+in [`PACKAGES_DEPRECATED`](@ref).
+"""
+function RemoveDeprecatedPackagesFromHomalgProject()
+
+    for pkg in PACKAGES_TO_DOWNLOAD
+        RemovePackageFromHomalgProject(pkg)
+    end
+
+end
+
+export RemoveDeprecatedPackagesFromHomalgProject
 
 """
     HomalgProject.PACKAGES_TO_COMPILE
