@@ -173,6 +173,12 @@ global PACKAGES_BASED_ON_CAP = [
     "ZariskiFrames",
 ]
 
+##
+global PACKAGES_NEEDED = [
+    ##
+    "InfiniteLists",
+]
+
 """
     HomalgProject.PACKAGES_TO_DOWNLOAD
 
@@ -181,7 +187,7 @@ List of packages which will be considered by
 * [`UpdateAllPackagesFromHomalgProject`](@ref)()
 * [`RemoveAllPackagesFromHomalgProject`](@ref)()
 """
-global PACKAGES_TO_DOWNLOAD = vcat(PACKAGES_BASED_ON_HOMALG, PACKAGES_BASED_ON_CAP)
+global PACKAGES_TO_DOWNLOAD = vcat(PACKAGES_BASED_ON_HOMALG, PACKAGES_BASED_ON_CAP, PACKAGES_NEEDED)
 
 """
     DownloadAllPackagesFromHomalgProject()
