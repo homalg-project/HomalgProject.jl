@@ -254,7 +254,7 @@ in [`PACKAGES_DEPRECATED`](@ref).
 """
 function RemoveDeprecatedPackagesFromHomalgProject()
 
-    for pkg in PACKAGES_TO_DOWNLOAD
+    for pkg in PACKAGES_DEPRECATED
         RemovePackageFromHomalgProject(pkg)
     end
 
