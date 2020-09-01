@@ -19,3 +19,21 @@ InstallGlobalFunction( EnhanceRootDirectories, function( rootpaths )
       fi;
     fi;
 end );
+
+##
+DeclareOperation( "IsShowable",
+        [ IsString, IsObject ] );
+
+## fallback method
+InstallMethod( IsShowable,
+        [ IsString, IsObject ],
+
+  function ( mime, obj )
+    
+    if mime in [ "text/plain" ] then
+        return true;
+    fi;
+    
+    return false;
+    
+end );

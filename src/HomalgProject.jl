@@ -80,6 +80,13 @@ Base.:*(x::GAP.GapObj, y::String) = x * julia_to_gap(y)
 Base.getindex(x::GAP.GapObj, y::String) = GAP.Globals.ELM_LIST(x, julia_to_gap(y))
 Base.:/(x::GAP.GapObj, y::Array{Main.ForeignGAP.MPtr,1}) = GAP.Globals.QUO(x, julia_to_gap(y))
 
+function Base.showable(mime::MIME, obj::GapObj)
+    return GAP.Globals.IsShowable(julia_to_gap(string(mime)), obj)
+end
+
+Base.show(io::IO, ::MIME"application/x-latex", obj::GapObj) = print(io, string("\$\$", gap_to_julia(GAP.Globals.LaTeXString(obj))), "\$\$" )
+Base.show(io::IO, ::MIME"text/latex", obj::GapObj) = print(io, string("\$\$", gap_to_julia(GAP.Globals.LaTeXString(obj))), "\$\$" )
+
 function LoadPackage(pkgname::String)
     GAP.LoadPackageAndExposeGlobals(pkgname, Main, all_globals = true)
 end
