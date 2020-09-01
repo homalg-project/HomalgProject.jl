@@ -1,7 +1,7 @@
 name = "HomalgProject"
 uuid = "50bd374c-87b5-11e9-015a-2febe71398bd"
 authors = ["Mohamed Barakat <mohamed.barakat@uni-siegen.de>"]
-version = "0.4.13"
+version = "0.4.14"
 
 [deps]
 GAP = "c863536a-3901-11e9-33e7-d5cd0df7b904"
