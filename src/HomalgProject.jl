@@ -68,11 +68,6 @@ import GAP: julia_to_gap, gap_to_julia, @g_str, @gap, GapObj
 export GAP
 export julia_to_gap, gap_to_julia, @g_str, @gap, GapObj
 
-import Singular
-import Singular.libSingular: call_interpreter
-
-export call_interpreter
-
 import Pkg
 import Markdown
 
@@ -107,14 +102,30 @@ export SizeScreen
 
 include(joinpath("..","deps","homalg-project.jl"))
 
+## Singular
+import Singular
+import Singular.libSingular: call_interpreter
+
+export call_interpreter
+
 global SINGULAR_PATH = dirname(dirname(pathof(Singular)))
 
-global HOMALG_PATHS = []
+## Singular_jll
+import Singular_jll
 
 ## $(HOMALG_PROJECT_PATH)/deps/usr/bin should be the last entry
-HOMALG_PATHS = vcat(HOMALG_PATHS, [[joinpath(HOMALG_PROJECT_PATH, "deps", "usr", "bin")]])
+global HOMALG_PATHS = vcat(
+    Singular_jll.PATH_list,
+    [joinpath(HOMALG_PROJECT_PATH, "deps", "usr", "bin")]
+)
 
 export HOMALG_PATHS
+
+global SINGULAR_LIBRARY_PATHS = vcat(
+    Singular_jll.LIBPATH_list,
+)
+
+export SINGULAR_LIBRARY_PATHS
 
 ##
 function UseExternalSingular(bool::Bool)
@@ -134,39 +145,10 @@ function UseExternalSingular(bool::Bool)
         return true
     end
 
-    ## add ~/.julia/.../Singular/deps/usr/bin/ to GAPInfo.DirectoriesSystemPrograms
-    singular = julia_to_gap(joinpath(SINGULAR_PATH, "deps", "usr", "bin"))
-    paths = GAP.Globals.Concatenation(
-        julia_to_gap([singular]),
-        GAP.Globals.GAPInfo.DirectoriesSystemPrograms,
-    )
-    paths = GAP.Globals.Unique(paths)
-    GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
-    GAP.Globals.GAPInfo.DirectoriesPrograms = GAP.Globals.List(
-        GAP.Globals.GAPInfo.DirectoriesSystemPrograms,
-        GAP.Globals.Directory,
-    )
-
-    if GAP.Globals.TestPackageAvailability(julia_to_gap("io")) == GAP.Globals.fail
-        GAP.Packages.install("io")
-    end
-
     ## loading IO_ForHomalg now suppresses its banner later
     LoadPackage("IO_ForHomalg")
 
     SizeScreen( [ 2^12 ] )
-
-    ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
-    LoadPackage("RingsForHomalg")
-
-    ## add ~/.julia/.../Singular/deps/usr/lib/ to LD_LIBRARY_PATH and DYLD_LIBRARY_PATH
-    lib = joinpath(SINGULAR_PATH, "deps", "usr", "lib")
-    lib = [
-        "LD_LIBRARY_PATH=" * lib * ":\$LD_LIBRARY_PATH",
-        "DYLD_LIBRARY_PATH=" * lib * ":\$DYLD_LIBRARY_PATH",
-    ]
-    GAP.Globals.HOMALG_IO_Singular.environment =
-        julia_to_gap([julia_to_gap(lib[1]), julia_to_gap(lib[2])])
 
     GAP.Globals.HOMALG_IO_Singular.LaunchCAS = false
 
@@ -229,18 +211,30 @@ function __init__()
         HOMALG_PROJECT_PATH * "/",
     )]))
 
-    ## add more paths to GAPInfo.DirectoriesSystemPrograms
-    for paths in HOMALG_PATHS
-        paths = GAP.Globals.List(julia_to_gap(paths), julia_to_gap)
-        paths =
-            GAP.Globals.Concatenation(paths, GAP.Globals.GAPInfo.DirectoriesSystemPrograms)
-        paths = GAP.Globals.Unique(paths)
-        GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
-        GAP.Globals.GAPInfo.DirectoriesPrograms = GAP.Globals.List(
-            GAP.Globals.GAPInfo.DirectoriesSystemPrograms,
-            GAP.Globals.Directory,
-        )
+    if GAP.Globals.TestPackageAvailability(julia_to_gap("io")) == GAP.Globals.fail
+        GAP.Packages.install("io")
     end
+
+    ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
+    LoadPackage("RingsForHomalg")
+
+    ## add binary paths to GAPInfo.DirectoriesSystemPrograms
+    paths = GAP.Globals.Concatenation(
+        julia_to_gap(map(julia_to_gap, HOMALG_PATHS)),
+        GAP.Globals.GAPInfo.DirectoriesSystemPrograms
+    )
+    paths = GAP.Globals.Unique(paths)
+    GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
+    GAP.Globals.GAPInfo.DirectoriesPrograms = GAP.Globals.List(
+        GAP.Globals.GAPInfo.DirectoriesSystemPrograms,
+        GAP.Globals.Directory
+    )
+
+    ## add library pathes to LD_LIBRARY_PATH and DYLD_LIBRARY_PATH in HOMALG_IO_Singular.environment
+    lib = join(SINGULAR_LIBRARY_PATHS, ":")
+    GAP.Globals.HOMALG_IO_Singular.environment =
+        julia_to_gap([julia_to_gap("LD_LIBRARY_PATH=" * lib * ":\$LD_LIBRARY_PATH"),
+                      julia_to_gap("DYLD_LIBRARY_PATH=" * lib * ":\$DYLD_LIBRARY_PATH")])
 
     UseExternalSingular(true)
     UseExternalSingular(false)
