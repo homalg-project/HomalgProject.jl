@@ -9,7 +9,6 @@ The following examples tests the functionality of the software projects
 ```@meta
 DocTestSetup = quote
     using HomalgProject
-    SizeScreen( [ 2^12 ] )
     LoadPackage( "GradedModules" )
     LoadPackage( "GradedModulePresentationsForCAP" )
     GAP.Globals.HOMALG_IO.show_banners = false

@@ -148,8 +148,6 @@ function UseExternalSingular(bool::Bool)
     ## loading IO_ForHomalg now suppresses its banner later
     LoadPackage("IO_ForHomalg")
 
-    SizeScreen( [ 2^12 ] )
-
     GAP.Globals.HOMALG_IO_Singular.LaunchCAS = false
 
     return true
@@ -236,6 +234,9 @@ function __init__()
         julia_to_gap([julia_to_gap("LD_LIBRARY_PATH=" * lib * ":\$LD_LIBRARY_PATH"),
                       julia_to_gap("DYLD_LIBRARY_PATH=" * lib * ":\$DYLD_LIBRARY_PATH")])
 
+    ## no effect GAP.Globals.SetPrintFormattingStatus(julia_to_gap("*stdout*"),false)
+    SizeScreen( [ 2^12 ] )
+    
     UseExternalSingular(true)
     UseExternalSingular(false)
 
