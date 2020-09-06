@@ -234,7 +234,7 @@ function __init__()
         julia_to_gap([julia_to_gap("LD_LIBRARY_PATH=" * lib * ":\$LD_LIBRARY_PATH"),
                       julia_to_gap("DYLD_LIBRARY_PATH=" * lib * ":\$DYLD_LIBRARY_PATH")])
 
-    SizeScreen( [ 2^12 ] )
+    GAP.evalstr("SetPrintFormattingStatus( \"*stdout*\", false )")
 
     UseExternalSingular(true)
     UseExternalSingular(false)
