@@ -79,8 +79,8 @@ function Base.showable(mime::MIME, obj::GapObj)
     return GAP.Globals.IsShowable(julia_to_gap(string(mime)), obj)
 end
 
-Base.show(io::IO, ::MIME"application/x-latex", obj::GapObj) = print(io, string("\$\$", gap_to_julia(GAP.Globals.LaTeXString(obj))), "\$\$")
-Base.show(io::IO, ::MIME"text/latex", obj::GapObj) = print(io, string("\$\$", gap_to_julia(GAP.Globals.LaTeXString(obj))), "\$\$")
+Base.show(io::IO, ::MIME"application/x-latex", obj::GapObj) = print(io, string("\$\$", gap_to_julia(GAP.Globals.LaTeXStringOp(obj))), "\$\$")
+Base.show(io::IO, ::MIME"text/latex", obj::GapObj) = print(io, string("\$\$", gap_to_julia(GAP.Globals.LaTeXStringOp(obj))), "\$\$")
 
 function LoadPackage(pkgname::String)
     GAP.LoadPackageAndExposeGlobals(pkgname, Main, all_globals = true)
