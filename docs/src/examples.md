@@ -70,7 +70,6 @@ x^4,  x^3*z,  0,        x^2*z,     -x*z,
 0,    0,      x^2*z,    -x*y*z,    y*z,
 0,    0,      x^2*y-x^2,-x*y^2+x*y,y^2-y
 
-
 Cokernel of the map
 
 Q[x,y,z]^(1x6) --> Q[x,y,z]^(1x5),
@@ -93,7 +92,6 @@ Degree 0:
 x*y,0,-z,0,
 x^2,0,0, -z
 
-
 Cokernel of the map
 
 Q[x,y,z]^(1x3) --> Q[x,y,z]^(1x4),
@@ -106,7 +104,6 @@ y,-z,0,
 0,x, -y,
 x,0, -z,
 0,-y,x^2-1
-
 
 Cokernel of the map
 
@@ -209,7 +206,6 @@ x^2,0,0, -z,1,0, 0,    0,  0,
 0,  0,0, 0, 0,0, 0,    0,  y,
 0,  0,0, 0, 0,0, 0,    0,  x
 
-
 Cokernel of the map
 
 Q[x,y,z]^(1x12) --> Q[x,y,z]^(1x9),
@@ -226,7 +222,6 @@ x^4,  x^3*z,  0,        x^2*z,     -x*z,
 0,    0,      x*y,      -y^2,      x^2-1,
 0,    0,      x^2*z,    -x*y*z,    y*z,
 0,    0,      x^2*y-x^2,-x*y^2+x*y,y^2-y
-
 
 Cokernel of the map
 
@@ -250,7 +245,6 @@ x^2,0,0, -z,1,0, 0,    0,  0,
 0,  0,0, 0, 0,0, 0,    0,  z,
 0,  0,0, 0, 0,0, 0,    0,  y,
 0,  0,0, 0, 0,0, 0,    0,  x
-
 
 Cokernel of the map
 
@@ -295,7 +289,6 @@ GAP: <A 2 x 1 matrix over a graded ring>
 julia> Display( mat )
 x,
 y
-
 (over a graded ring)
 
 julia> ϕ = GradedPresentationMorphism( M, mat, N )
@@ -325,7 +318,6 @@ GAP: <An object in The category of graded left f.p. modules over Q[x,y] (with we
 julia> Display( coker_mod )
 x,
 y
-
 (over a graded ring)
 
 An object in The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ])
