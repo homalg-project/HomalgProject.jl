@@ -88,17 +88,7 @@ end
 
 export LoadPackage
 
-function HomalgMatrix(M::String, m::Int64, n::Int64, R::GAP.GapObj)
-    return GAP.Globals.HomalgMatrix(julia_to_gap(M), m, n, R)
-end
-
-export HomalgMatrix
-
-function SizeScreen(L::Array)
-    return GAP.Globals.SizeScreen(julia_to_gap(L))
-end
-
-export SizeScreen
+include("conversions.jl")
 
 include(joinpath("..","deps","homalg-project.jl"))
 
