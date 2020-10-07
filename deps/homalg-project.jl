@@ -156,6 +156,7 @@ global PACKAGES_BASED_ON_CAP = [
     "IntrinsicCategories",
     "IntrinsicModules",
     "InternalModules",
+    "WrapperCategories",
     "LazyCategories",
     "Locales",
     "QPA2",
