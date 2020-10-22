@@ -195,7 +195,7 @@ function __init__()
     GAP.Globals.ExtendRootDirectories(julia_to_gap([GAP.Globals.UserHomeExpand(julia_to_gap("~/.gap/"))]))
 
     ## add "~/.julia/.../HomalgProject/" at the beginning of GAPInfo.RootPaths
-    GAP.Globals.EnhanceRootDirectories(julia_to_gap([julia_to_gap(
+    GAP.Globals.AddToRootDirectories(julia_to_gap([julia_to_gap(
         HOMALG_PROJECT_PATH * "/",
     )]))
 
