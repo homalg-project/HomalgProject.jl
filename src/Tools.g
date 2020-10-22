@@ -1,9 +1,9 @@
 #############################################################################
 ##
-#F  EnhanceRootDirectories( <paths> )
+#F  AddToRootDirectories( <paths> )
 ##
-DeclareGlobalFunction( "EnhanceRootDirectories" );
-InstallGlobalFunction( EnhanceRootDirectories, function( rootpaths )
+DeclareGlobalFunction( "AddToRootDirectories" );
+InstallGlobalFunction( AddToRootDirectories, function( rootpaths )
     rootpaths:= Filtered( rootpaths, path -> not path in GAPInfo.RootPaths );
     if not IsEmpty( rootpaths ) then
       # Append the new root paths.
