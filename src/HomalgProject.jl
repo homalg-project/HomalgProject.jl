@@ -60,37 +60,8 @@ module HomalgProject
 
 greet() = print("The homalg project compatibility package for Julia")
 
-import Base: getindex
-
-import GAP
-import GAP: julia_to_gap, gap_to_julia, @g_str, @gap, GapObj
-
-export GAP
-export julia_to_gap, gap_to_julia, @g_str, @gap, GapObj
-
 import Pkg
 import Markdown
-
-Base.:*(x::GAP.GapObj, y::String) = x * julia_to_gap(y)
-Base.getindex(x::GAP.GapObj, y::String) = GAP.Globals.ELM_LIST(x, julia_to_gap(y))
-Base.:/(x::GAP.GapObj, y::Array{Main.ForeignGAP.MPtr,1}) = GAP.Globals.QUO(x, julia_to_gap(y))
-
-function Base.showable(mime::MIME, obj::GapObj)
-    return GAP.Globals.IsShowable(julia_to_gap(string(mime)), obj)
-end
-
-Base.show(io::IO, ::MIME"application/x-latex", obj::GapObj) = print(io, string("\$\$", gap_to_julia(GAP.Globals.LaTeXStringOp(obj))), "\$\$")
-Base.show(io::IO, ::MIME"text/latex", obj::GapObj) = print(io, string("\$\$", gap_to_julia(GAP.Globals.LaTeXStringOp(obj))), "\$\$")
-
-function LoadPackage(pkgname::String)
-    GAP.LoadPackageAndExposeGlobals(pkgname, Main, all_globals = true)
-end
-
-export LoadPackage
-
-include("conversions.jl")
-
-include(joinpath("..","deps","homalg-project.jl"))
 
 ## Singular
 import Singular
@@ -98,24 +69,36 @@ import Singular.libSingular: call_interpreter
 
 export call_interpreter
 
-global SINGULAR_PATH = dirname(dirname(pathof(Singular)))
+## GAP
+import GAP
+import GAP: @g_str, @gap, GapObj
 
-## Singular_jll
-import Singular_jll
+export GAP
+export @g_str, @gap, GapObj
 
-## $(HOMALG_PROJECT_PATH)/deps/usr/bin should be the last entry
-global HOMALG_PATHS = vcat(
-    Singular_jll.PATH_list,
-    [joinpath(HOMALG_PROJECT_PATH, "deps", "usr", "bin")]
-)
+## CapAndHomalg
+import CapAndHomalg
+import CapAndHomalg:
+    HomalgMatrix, RepresentationCategoryObject, SizeScreen, SIZE_SCREEN_ORIGINAL, SINGULAR_BINARY_PATHS, SINGULAR_LIBRARY_PATHS, UseSystemSingular, ≟,
+    DownloadPackageFromHomalgProject, UpdatePackageFromHomalgProject, RemovePackageFromHomalgProject,
+    DownloadAllPackagesFromHomalgProject, UpdateAllPackagesFromHomalgProject, RemoveAllPackagesFromHomalgProject, RemoveDeprecatedPackagesFromHomalgProject,
+    CompilePackagesForHomalgProject, HOMALG_PATHS
 
-export HOMALG_PATHS
+export CapAndHomalg
+export
+    HomalgMatrix, RepresentationCategoryObject, SizeScreen, SIZE_SCREEN_ORIGINAL, SINGULAR_BINARY_PATHS, SINGULAR_LIBRARY_PATHS, UseSystemSingular, ≟,
+    DownloadPackageFromHomalgProject, UpdatePackageFromHomalgProject, RemovePackageFromHomalgProject,
+    DownloadAllPackagesFromHomalgProject, UpdateAllPackagesFromHomalgProject, RemoveAllPackagesFromHomalgProject, RemoveDeprecatedPackagesFromHomalgProject,
+    CompilePackagesForHomalgProject, HOMALG_PATHS
 
-global SINGULAR_LIBRARY_PATHS = vcat(
-    Singular_jll.LIBPATH_list,
-)
+global HOMALG_PROJECT_PATH = dirname(@__DIR__)
 
-export SINGULAR_LIBRARY_PATHS
+function LoadPackage(pkgname::String)
+    CapAndHomalg.LoadPackageAndExposeGlobals(pkgname, HomalgProject)
+    nothing
+end
+
+export LoadPackage
 
 ##
 function UseExternalSingular(bool::Bool)
@@ -124,7 +107,7 @@ function UseExternalSingular(bool::Bool)
         ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
         LoadPackage("RingsForHomalg")
         ## Read( "LaunchCAS_JSingularInterpreterForHomalg.g" )
-        path = julia_to_gap(joinpath(
+        path = GapObj(joinpath(
             HOMALG_PROJECT_PATH,
             "src",
             "LaunchCAS_JSingularInterpreterForHomalg.g",
@@ -159,7 +142,7 @@ if VERSION >= v"1.4"
     if Base.haskey(deps, Base.UUID("50bd374c-87b5-11e9-015a-2febe71398bd"))
         ver = Pkg.dependencies()[Base.UUID("50bd374c-87b5-11e9-015a-2febe71398bd")]
         if occursin("/dev/", ver.source)
-            version = VersionNumber("$(ver.version)-dev")
+            version = VersionNumber("$(ver.version)")
         else
             version = VersionNumber("$(ver.version)")
         end
@@ -182,49 +165,6 @@ else
 end
 
 function __init__()
-
-    DownloadPackageFromHomalgProject("homalg_project")
-    DownloadPackageFromHomalgProject("CAP_project")
-    DownloadPackageFromHomalgProject("OscarForHomalg")
-
-    ## Read( "Tools.g" )
-    path = julia_to_gap(joinpath(HOMALG_PROJECT_PATH, "src", "Tools.g"))
-    GAP.Globals.Read(path)
-
-    ## add "~/.gap/" at the end of GAPInfo.RootPaths
-    GAP.Globals.ExtendRootDirectories(julia_to_gap([GAP.Globals.UserHomeExpand(julia_to_gap("~/.gap/"))]))
-
-    ## add "~/.julia/.../HomalgProject/" at the beginning of GAPInfo.RootPaths
-    GAP.Globals.AddToRootDirectories(julia_to_gap([julia_to_gap(
-        HOMALG_PROJECT_PATH * "/",
-    )]))
-
-    if GAP.Globals.TestPackageAvailability(julia_to_gap("io")) == GAP.Globals.fail
-        GAP.Packages.install("io")
-    end
-
-    ## LoadPackage( "RingsForHomalg" ) ## needed by the variable HOMALG_IO_Singular below
-    LoadPackage("RingsForHomalg")
-
-    ## add binary paths to GAPInfo.DirectoriesSystemPrograms
-    paths = GAP.Globals.Concatenation(
-        julia_to_gap(map(julia_to_gap, HOMALG_PATHS)),
-        GAP.Globals.GAPInfo.DirectoriesSystemPrograms
-    )
-    paths = GAP.Globals.Unique(paths)
-    GAP.Globals.GAPInfo.DirectoriesSystemPrograms = paths
-    GAP.Globals.GAPInfo.DirectoriesPrograms = GAP.Globals.List(
-        GAP.Globals.GAPInfo.DirectoriesSystemPrograms,
-        GAP.Globals.Directory
-    )
-
-    ## add library pathes to LD_LIBRARY_PATH and DYLD_LIBRARY_PATH in HOMALG_IO_Singular.environment
-    lib = join(SINGULAR_LIBRARY_PATHS, ":")
-    GAP.Globals.HOMALG_IO_Singular.environment =
-        julia_to_gap([julia_to_gap("LD_LIBRARY_PATH=" * lib * ":\$LD_LIBRARY_PATH"),
-                      julia_to_gap("DYLD_LIBRARY_PATH=" * lib * ":\$DYLD_LIBRARY_PATH")])
-
-    SizeScreen( [ 2^12 ] )
 
     UseExternalSingular(true)
     UseExternalSingular(false)

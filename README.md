@@ -1,25 +1,37 @@
-# HomalgProject.jl
+<!-- BEGIN HEADER -->
+# HomalgProject.jl&ensp;<sup><sup>[![View code][code-img]][code-url]</sup></sup>
+
+### Simplified access to the repositories of the GitHub organization homalg-project
 
 | **Documentation** | **Build Status** | **GitHub Actions** |
 |:-----------------:|:----------------:|:------------------:|
 | [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url] | [![][tests-img]][tests-url] [![][codecov-img]][codecov-url] | [![][tagbot-img]][tagbot-url] [![][docsbuilder-img]][docsbuilder-url] [![][compathelper-img]][compathelper-url] |
 
+<!-- END HEADER -->
+
 ## Introduction
 
-The [Julia](https://julialang.org/) package `HomalgProject` provides simplified access to the repositories of the [GAP](https://www.gap-system.org) packages hosted at the GitHub organization [homalg-project](https://github.com/homalg-project), most of which are based on the
+The [Julia](https://julialang.org/) package `HomalgProject` provides simplified access to the repositories of the [GAP](https://www.gap-system.org/) packages hosted on the [GitHub organization homalg-project](https://homalg-project.github.io/), most of which are based on the
 
-* [CAP project](https://github.com/homalg-project/CAP_project/),
-* [homalg project](https://github.com/homalg-project/homalg_project/).
+* [CAP project](https://github.com/homalg-project/CAP_project#readme),
+* [homalg project](https://github.com/homalg-project/homalg_project#readme).
 
 These are open source [GAP](https://www.gap-system.org) multi-package projects for constructive category theory and homological algebra with applications to module theory of commutative and non-commutative algebras and algebraic geometry.
 
 ## Installation
 
-To install Julia follow the instructions of the first two steps on the [Oscar installation page](https://oscar.computeralgebra.de/install/). Then start Julia and add the package `HomalgProject`:
+#### Install Julia
+
+To install Julia follow the first Steps 0 and 1 on our [installation page](https://homalg-project.github.io/docs/installation).
+
+#### Install `HomalgProject.jl`
+
+Then start `julia` in a terminal and add the package `HomalgProject`:
 
 ```julia
-$ julia
 julia> using Pkg; Pkg.add("HomalgProject")
+
+julia> using HomalgProject
 ```
 
 For more information on the included [GAP](https://www.gap-system.org) packages see the [documentation](https://homalg-project.github.io/HomalgProject.jl/dev/#Installation-1).
@@ -43,26 +55,29 @@ julia> using Pkg; Pkg.build("HomalgProject")
 | computer algebra systems                    | through the Julia packages                                 |
 |:-------------------------------------------:|:----------------------------------------------------------:|
 | [GAP](https://www.gap-system.org/)          | [Gap.jl](https://github.com/oscar-system/GAP.jl)           |
-| [Nemo](http://www.nemocas.org/)             | Nemo = [Nemo.jl](https://github.com/wbhart/Nemo.jl)        |
+| [Nemo](http://www.nemocas.org/)             | Nemo = [Nemo.jl](https://github.com/Nemocas/Nemo.jl)       |
 | [Singular](https://www.singular.uni-kl.de/) | [Singular.jl](https://github.com/oscar-system/Singular.jl) |
 
 all of which are components of the computer algebra system [OSCAR](https://oscar.computeralgebra.de/).
 
-Some of the bundled packages use the GAP packages
+Some of the bundled packages use the [GAP](https://www.gap-system.org) packages
 
 * [IO](https://github.com/gap-packages/io/)
 * [ferret](https://github.com/gap-packages/ferret/)
 * [json](https://github.com/gap-packages/json/)
-* [QPA2](https://github.com/oysteins/QPA2/)
+* [QPA2](https://github.com/sunnyquiver/QPA2/)
 
 and the
 
-| third party software                                | through the GAP packages                                                        |
-|:---------------------------------------------------:|:-------------------------------------------------------------------------------:|
-| [cddlib](https://github.com/cddlib/cddlib/)         | [CddInterface](https://github.com/homalg-project/CddInterface/)                 |
-| [4ti2](https://4ti2.github.io/)                     | [4ti2Interface](https://homalg-project.github.io/homalg_project/4ti2Interface/) |
-| [Normaliz](https://www.normaliz.uni-osnabrueck.de/) | [NormalizInterface](https://github.com/gap-packages/NormalizInterface/)         |
-| [Graphviz](https://graphviz.org/)                   | [Digraphs](https://github.com/gap-packages/digraphs/)                           |
+| third party software                                | through the GAP packages                                                        | and the Julia packages |
+|:---------------------------------------------------:|:-------------------------------------------------------------------------------:|:----------------------:|
+| [Graphviz](https://graphviz.org/)                   | [Digraphs](https://github.com/gap-packages/digraphs/)                           | [Graphviz_jll.jl](https://github.com/JuliaBinaryWrappers/Graphviz_jll.jl) |
+| [4ti2](https://4ti2.github.io/)                     | [4ti2Interface](https://homalg-project.github.io/homalg_project/4ti2Interface/) | [lib4ti2_jll.jl](https://github.com/JuliaBinaryWrappers/lib4ti2_jll.jl) |
+
+<!--
+| [cddlib](https://github.com/cddlib/cddlib/)         | [CddInterface](https://github.com/homalg-project/CddInterface/)                 | [cddlib_jll.jl](https://github.com/JuliaBinaryWrappers/cddlib_jll.jl) |
+| [Normaliz](https://www.normaliz.uni-osnabrueck.de/) | [NormalizInterface](https://github.com/gap-packages/NormalizInterface/)         | [normaliz_jll.jl](https://github.com/JuliaBinaryWrappers/normaliz_jll.jl) |
+-->
 
 ## General Disclaimer
 
@@ -72,7 +87,12 @@ This software is licensed under the LGPL, version 3, or any later version.
 
 ## Funding
 
-*The development of both software projects was partially funded by the [DFG (German Research Foundation)](https://www.dfg.de/) through the [Special Priority Project SPP 1489](https://spp.computeralgebra.de/) and the [Transregional Collaborative Research Centre SFB-TRR 195](https://www.computeralgebra.de/sfb/).*
+*The development of this package and many of the GAP packages hosted on the GitHub organization [homalg-project](https://github.com/homalg-project/) was partially funded by the [DFG (German Research Foundation)](https://www.dfg.de/) through the*
+
+* [Special Priority Project SPP 1489](https://spp.computeralgebra.de/),
+* [Transregional Collaborative Research Centre SFB-TRR 195](https://www.computeralgebra.de/sfb/).
+
+<!-- BEGIN FOOTER -->
 
 [docs-dev-img]: https://img.shields.io/badge/docs-dev-blue.svg
 [docs-dev-url]: https://homalg-project.github.io/HomalgProject.jl/dev/
@@ -93,3 +113,8 @@ This software is licensed under the LGPL, version 3, or any later version.
 
 [codecov-img]: https://codecov.io/gh/homalg-project/HomalgProject.jl/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/homalg-project/HomalgProject.jl
+
+[code-img]: https://img.shields.io/badge/-View%20code-blue?logo=github
+[code-url]: https://github.com/homalg-project/HomalgProject.jl#top
+
+<!-- END FOOTER -->
