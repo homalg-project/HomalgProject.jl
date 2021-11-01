@@ -46,7 +46,7 @@ julia> using Pkg; Pkg.update("HomalgProject")
 julia> Pkg.build("HomalgProject")
 ```
 
-This will also clone the repositories listed in [`HomalgProject.PACKAGES_TO_DOWNLOAD`](@ref) using [`DownloadAllPackagesFromHomalgProject`](@ref) and compile the packages listed in [`HomalgProject.PACKAGES_TO_COMPILE`](@ref) using `GAP.Packages.install`(`pkgname`).
+This will also clone the repositories listed in `CapAndHomalg.PACKAGES_TO_DOWNLOAD` using `DownloadAllPackagesFromHomalgProject` and compile the packages listed in `CapAndHomalg.PACKAGES_TO_COMPILE` using `GAP.Packages.install`(`pkgname`).
 
 ```@docs
 version
