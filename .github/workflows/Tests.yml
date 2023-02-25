@@ -19,20 +19,21 @@ jobs:
       fail-fast: false
       matrix:
         julia-version:
-          - '1.7'
+          - '1.8'
           - 'nightly'
         julia-arch:
           - x64
         os:
           - ubuntu-latest
-          - macOS-latest
+          # currently broken: https://github.com/homalg-project/CapAndHomalg.jl/issues/70
+          #- macOS-latest
 
     env:
       JULIA_TRACK_COVERAGE: yes
 
     steps:
       - run: '[ "$GITHUB_EVENT_NAME" = "pull_request" ] || curl --fail -X PUT -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/Tests.yml/enable'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup Julia environment
         uses: julia-actions/setup-julia@latest
@@ -49,4 +50,4 @@ jobs:
         uses: julia-actions/julia-processcoverage@v1
 
       - name: "Upload to codecov.io"
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
