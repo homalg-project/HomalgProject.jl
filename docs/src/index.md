@@ -48,19 +48,6 @@ julia> Pkg.build("HomalgProject")
 
 This will also clone the repositories listed in `CapAndHomalg.PACKAGES_TO_DOWNLOAD` using `DownloadAllPackagesFromHomalgProject` and compile the packages listed in `CapAndHomalg.PACKAGES_TO_COMPILE` using `GAP.Packages.install`(`pkgname`).
 
-```@docs
-version
-PKG_DIR
-PACKAGES_TO_DOWNLOAD
-DownloadAllPackagesFromHomalgProject
-UpdateAllPackagesFromHomalgProject
-RemoveAllPackagesFromHomalgProject
-DownloadPackageFromHomalgProject
-UpdatePackageFromHomalgProject
-RemovePackageFromHomalgProject
-PACKAGES_TO_COMPILE
-```
-
 ## Software dependency
 
 `HomalgProject` relies on the
@@ -108,4 +95,8 @@ This software is licensed under the [LGPL, version 3](https://www.gnu.org/licens
 ## Index
 
 ```@index
+```
+
+```@autodocs
+Modules = [HomalgProject]
 ```
