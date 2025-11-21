@@ -1,6 +1,6 @@
 name = "HomalgProject"
 uuid = "50bd374c-87b5-11e9-015a-2febe71398bd"
-version = "1.4.5"
+version = "1.4.6"
 authors = ["Mohamed Barakat <mohamed.barakat@uni-siegen.de>"]
 
 [deps]
