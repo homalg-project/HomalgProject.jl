@@ -1,6 +1,6 @@
 name = "HomalgProject"
 uuid = "50bd374c-87b5-11e9-015a-2febe71398bd"
-version = "1.4.6"
+version = "1.4.7"
 authors = ["Mohamed Barakat <mohamed.barakat@uni-siegen.de>"]
 
 [deps]
@@ -11,8 +11,8 @@ Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 Singular = "bcd08a7b-43d2-5ff7-b6d4-c458787f915c"
 
 [compat]
-CapAndHomalg = "~1.6.8"
-GAP = "0.11, 0.12, 0.13, 0.14, 0.15, 0.16"
+CapAndHomalg = "~1.6.13"
+GAP = "0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17"
 Singular = "0.8, 0.9, 0.10, 0.11, 0.12, 0.13, 0.17, 0.18, 0.19, 0.20, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28"
 julia = "1.8, 1.9, 1.10, 1.11, 1.12"
 
