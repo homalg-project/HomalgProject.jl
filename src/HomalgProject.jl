@@ -81,14 +81,14 @@ import CapAndHomalg:
     HomalgMatrix, RepresentationCategoryObject, SizeScreen, SIZE_SCREEN_ORIGINAL, SINGULAR_BINARY_PATHS, SINGULAR_LIBRARY_PATHS, UseSystemSingular, ≟,
     DownloadPackageFromHomalgProject, UpdatePackageFromHomalgProject, RemovePackageFromHomalgProject,
     DownloadAllPackagesFromHomalgProject, UpdateAllPackagesFromHomalgProject, RemoveAllPackagesFromHomalgProject, RemoveDeprecatedPackagesFromHomalgProject,
-    CompilePackagesForHomalgProject, HOMALG_PATHS, Display, InfoOfInstalledOperationsOfCategory
+    CompilePackagesForHomalgProject, HOMALG_PATHS, Display
 
 export CapAndHomalg
 export
     HomalgMatrix, RepresentationCategoryObject, SizeScreen, SIZE_SCREEN_ORIGINAL, SINGULAR_BINARY_PATHS, SINGULAR_LIBRARY_PATHS, UseSystemSingular, ≟,
     DownloadPackageFromHomalgProject, UpdatePackageFromHomalgProject, RemovePackageFromHomalgProject,
     DownloadAllPackagesFromHomalgProject, UpdateAllPackagesFromHomalgProject, RemoveAllPackagesFromHomalgProject, RemoveDeprecatedPackagesFromHomalgProject,
-    CompilePackagesForHomalgProject, HOMALG_PATHS, Display, InfoOfInstalledOperationsOfCategory
+    CompilePackagesForHomalgProject, HOMALG_PATHS, Display
 
 global HOMALG_PROJECT_PATH = dirname(@__DIR__)
 
