@@ -237,7 +237,7 @@ GAP: Q[x,y]
 julia> Sgrmod = GradedLeftPresentations( S )
 GAP: The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ])
 
-julia> #InfoOfInstalledOperationsOfCategory( Sgrmod )
+julia> #Display( Sgrmod )
 
 julia> #ListPrimitivelyInstalledOperationsOfCategory( Sgrmod )
 
@@ -301,7 +301,7 @@ GAP: <Subcategory of The category of graded left f.p. modules over Q[x,y] (with 
 julia> CohP1 = Sgrmod / C
 GAP: The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: is_artinian
 
-julia> #InfoOfInstalledOperationsOfCategory( CohP1 )
+julia> #Display( CohP1 )
 
 julia> Sh = CanonicalProjection( CohP1 )
 GAP: Localization functor of The Serre quotient category of The category of graded left f.p. modules over Q[x,y] (with weights [ 1, 1 ]) by test function with name: is_artinian
